@@ -11,16 +11,24 @@
 #define F64HZ	(80000000/64)
 #define ENVELOPE_SCALE 100000
 
-
 #define Whole 16
 #define Half 8
 #define Quarter 4
 #define Eighth 2
 #define Sixteenth 1
 
+#define C
+#define D
+#define E
+#define F
+#define G
+#define A
+#define B
+
 typedef struct {
 	uint16_t pitch;    //frequency for note
 	uint16_t duration; //number of beats for note
+	//instrument
 } Note;
 
 typedef struct {

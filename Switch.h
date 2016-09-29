@@ -16,9 +16,13 @@ typedef enum {
  * Initialize the switches on the correct port, the pins, and the
  * interrupts necessary to handle button presses.
  */
-void Switch_Init(void);
 
-/**
- * Return whether or not the request button is pressed.
- */
-bool Switch_Pressed(Button buttonToCheck);
+
+void Buttons_Init(void);
+void EdgeCounter_Init(void);
+void Buttons_Input(void);
+uint32_t Button_Pressed(void);
+void DelayWait10ms(uint32_t n);
+void GPIOPortE_Handler(void);
+void Buttons_Handler(void); 
+
