@@ -22,14 +22,14 @@ F (.\Switch.c)(0x57F1463F)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apc
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x57E427AA)
 I (../inc/tm4c123gh6pm.h)(0x57C1C595)
 I (Switch.h)(0x57E0A679)
-I (Time.h)(0x57F1462F)
+I (Time.h)(0x57F1593C)
 I (boolean.h)(0x57DF25D6)
-F (.\main.c)(0x57F14EB8)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+F (.\main.c)(0x57F15943)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\main.o --omf_browse .\main.crf --depend .\main.d)
 I (..//inc//tm4c123gh6pm.h)(0x57C1C595)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x57E427AA)
 I (C:\Keil\ARM\ARMCC\include\stdbool.h)(0x51C87C24)
 I (PLL.h)(0x57DF25D6)
-I (Time.h)(0x57F1462F)
+I (Time.h)(0x57F1593C)
 I (DAC.h)(0x57EC679D)
 I (Switch.h)(0x57E0A679)
 I (Sound.h)(0x57F14DCF)
@@ -39,7 +39,7 @@ I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x57E427AA)
 I (ST7735.h)(0x57DF25D6)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C87C24)
-F (.\Time.c)(0x57F1472D)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\time.o --omf_browse .\time.crf --depend .\time.d)
+F (.\Time.c)(0x57F1596A)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\time.o --omf_browse .\time.crf --depend .\time.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x57E427AA)
 I (C:\Keil\ARM\ARMCC\include\stdlib.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C87C24)
