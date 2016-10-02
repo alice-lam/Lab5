@@ -3,6 +3,7 @@
 
 #ifndef Time_h
 
+<<<<<<< HEAD
 
 void Buttons_Init(void);
 void EdgeCounter_Init(void);
@@ -14,6 +15,8 @@ void Buttons_Handler(void);
 void SysTick_Init2(uint32_t period);
 =======
 >>>>>>> fad689863a3d175ce5f333f5c4784ee42e177fff
+=======
+>>>>>>> aa227f1c773fb2429be37421eaaa88859e57f03d
 
 void Timer0A_Init(void(*task)(void), uint32_t period);
 void Timer1_Init(void);
