@@ -3,7 +3,7 @@
 
 #ifndef Time_h
 
-<<<<<<< HEAD
+
 void Buttons_Init(void);
 void EdgeCounter_Init(void);
 void Buttons_Input(void);
