@@ -71,6 +71,7 @@ void Pause(void);
 
 //debug codes
 int main(void){ 
+	int check;
 	DisableInterrupts();
   PLL_Init(Bus80MHz);								// bus clock at 50 MHz
 	PortF_Init();
@@ -84,7 +85,33 @@ int main(void){
 	
 	Song_PlayInit(testSong);
 	//Pause();
-
+	check = Button_Pressed();
+		
+		//Play
+		if (check==0x01){
+			Play_mode = true;
+			NVIC_ST_CTRL_R = 0x07;
+			TIMER0_CTL_R = 0x00000001;
+			NVIC_ST_RELOAD_R = 500;
+		}
+		
+		//Pause
+		if (check==0x02){
+			Play_mode = false;
+			NVIC_ST_CTRL_R = 0;
+			TIMER0_CTL_R = 0x00000000;
+		}
+		
+		//Rewind
+		if (check==0x04){
+			//pause
+			Play_mode = false;
+			NVIC_ST_CTRL_R = 0;
+			TIMER0_CTL_R = 0x00000000;
+			//startover
+			Song_PlayInit(testSong);
+		}			
+			
   while(1){
 		LEDS ^= RED;
 		for(int i = 0; i < 1000000; i += 1);
