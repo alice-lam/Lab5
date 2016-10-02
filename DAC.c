@@ -26,6 +26,6 @@ void DAC_Init(uint16_t initialData) {
  * The output is limited to 12 bits so `outputVoltage` will be truncated to 12 bits before setting the output.
  */
 void DAC_Output(uint16_t outputVoltage) {
-	while((SSI0_SR_R & 0x02) == 0){};
-	SSI0_DR_R = outputVoltage;
+	//while((SSI1_SR_R & 0x02) == 0){};
+	SSI1_DR_R = outputVoltage;
 }

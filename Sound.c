@@ -32,26 +32,36 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
   742,779,818,857,896,937,978,1020,1062,1105,1149,1193,1238,1283,1328,1374,1421,
   1467,1515,1562,1610,1658,1706,1755,1803,1852,1901,1950,1999};
 
+uint32_t waveIndex = 0;
 uint32_t noteIndex = 0;
 uint32_t beatIndex = 0;
 Song currentSong;
-
+	
+//Function Declaration	
+int32_t getWave(void);
+	
 void Song_PlayInit(Song song) {
 	currentSong = song;
 	noteIndex = -1;
 	beatIndex = 0;
+	waveIndex = 0;
 }
 Note* Song_CurrentNote() {
 	return &currentSong.notes[noteIndex];
 }
 
 void Song_PlayHandler(void){
+	uint16_t n = getWave();
+	DAC_Output(n);
+	
+	/*
 	Note currentNote = *Song_CurrentNote();
 	beatIndex += 1;
 	if(beatIndex >= currentNote.duration * 2) {
 		noteIndex += 1;
 		beatIndex = 0;
 	}
+	*/
 }
 uint16_t Instrument_CurrentVoltage(uint32_t Index) {
 	return Wave[Index % 64];
@@ -151,7 +161,13 @@ Notes getNote(void){
 	return HotLine[noteIndex]; 
 }
 
-void decodeNote(Notes n){
+void decodeNotes(Notes n){
 	// prestage next pitch
+	
 	// prestage next inturrpts
+	
+}
+int32_t getWave(void){
+	waveIndex = (waveIndex+1) % 63;
+	return SinTable[waveIndex];
 }

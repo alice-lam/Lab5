@@ -70,6 +70,10 @@ void decodeNote(Notes n){
 	// prestage next inturrpts
 }
 
+void playSin(void){
+	
+}
+
 const Song testSong = {90, maryhadalamb};
 bool Play_mode = false;
 void Pause(void);
@@ -78,19 +82,20 @@ void Pause(void);
 int main(void){ 
 	int check;
 	DisableInterrupts();
-  PLL_Init(Bus80MHz);								// bus clock at 50 MHz
+  PLL_Init(Bus50MHz);								// bus clock at 50 MHz
 	PortF_Init();
   LEDS = 0;													// turn all LEDs off
 	DAC_Init(0);
 	Buttons_Init();
-	SysTick_Init();
+	//SysTick_Init();
 	//Timer0A_Init(&Song_PlayHandler, F20KHZ);	// initialize timer0A (20,000 Hz)
-  Timer0A_Init(&Song_PlayHandler, F16HZ);		// initialize timer0A (16 Hz)
+  //Timer0A_Init(&Song_PlayHandler, F16HZ);		// initialize timer0A (16 Hz)
+	Timer0A_Init(&Song_PlayHandler, 1776);		// initialize timer0A (16 Hz)
   EnableInterrupts();
 	
-	Song_PlayInit(testSong);
+	//Song_PlayInit(testSong);
 	//Pause();
-	check = Button_Pressed();
+	//check = Button_Pressed();
 		
 		//Play
 		if (check==0x01){
