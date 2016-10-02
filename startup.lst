@@ -1090,9 +1090,14 @@ ARM Macro Assembler    Page 17
               00000400 
               00000000 
 Command Line: --debug --xref --cpu=Cortex-M4 --apcs=interwork --depend=.\startu
+<<<<<<< HEAD
 p.d -o.\startup.o -ID:\Programs\Keil\ARM\RV31\INC -ID:\Programs\Keil\ARM\CMSIS\
 Include -ID:\Programs\Keil\ARM\Inc\TI\TM4C123 --predefine="__EVAL SETA 1" --lis
 t=.\startup.lst startup.s
+=======
+p.d -o.\startup.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -IC:\Keil\
+ARM\Inc\Luminary --predefine="__MICROLIB SETA 1" --list=.\startup.lst startup.s
+>>>>>>> cdcbaaa5b340bc5164329e4f6773aeb9c10a60da
 
 
 
@@ -2530,6 +2535,7 @@ Symbol: __main
    Uses
       At line 277 in file startup.s
 Comment: __main used once
+<<<<<<< HEAD
 __use_two_region_memory 00000000
 
 Symbol: __use_two_region_memory
@@ -2540,3 +2546,7 @@ Symbol: __use_two_region_memory
 Comment: __use_two_region_memory unused
 2 symbols
 480 symbols in table
+=======
+1 symbol
+474 symbols in table
+>>>>>>> cdcbaaa5b340bc5164329e4f6773aeb9c10a60da
