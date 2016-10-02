@@ -10,6 +10,7 @@ uint32_t Button_Pressed(void);
 void DelayWait10ms(uint32_t n);
 void GPIOPortE_Handler(void);
 void Buttons_Handler(void); 
+void SysTick_Init2(uint32_t period);
 
 
 #endif

@@ -1,0 +1,14 @@
+**/*.axf
+**/*.htm
+**/*.map
+**/*.dep
+**/*.crf
+**/*.o
+**/*.uvgui
+**/*.uvopt
+**/*.Anthony
+**/*.d
+**/*.lst
+**/*.lnp
+**/*.iex
+**/*.zip

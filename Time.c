@@ -51,7 +51,8 @@ void Timer0A_Init1HzInt(void){
 //        Maximum is 2^24-1
 //        Minimum is determined by length of ISR
 // Output: none
-void SysTick_Init(uint32_t period){long sr;
+void SysTick_Init2(uint32_t period){
+  volatile long sr;
   sr = StartCritical();
   NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
   NVIC_ST_RELOAD_R = period-1;// reload value
