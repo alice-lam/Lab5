@@ -22,7 +22,7 @@
 #define DHA			72	// Dotted Half Q + H
 #define HA 			48 	// Half 
 #define TQ			32 	// Triplet Quarter, 	
-#define SQ    	30  // Sixteenth tied to quarter
+#define SQ    		30  // Sixteenth tied to quarter
 #define QU 			24 	// Quarter 	
 #define DEI			18	// Dotted Eigth (Eight + Sixteenth)
 #define EI 			12 	// Eighth,  	
@@ -114,6 +114,8 @@ typedef struct {
 
 void Song_PlayInit(Song song);
 void Song_PlayHandler(void);
+
+int Song_EnvelopeScale(int currentMill, int totalMill);
 
 extern Note maryhadalamb[];
 

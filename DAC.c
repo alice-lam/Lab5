@@ -5,19 +5,20 @@
  * Initialize the DAC, setting up any necessary ports and pins.
  */
 void DAC_Init(uint16_t initialData) {
-	SYSCTL_RCGCSSI_R |= 0x01;
-	SYSCTL_RCGCGPIO_R |= 0x01;
-	while((SYSCTL_PRGPIO_R & 0x01) == 0){};
-	GPIO_PORTA_AFSEL_R |= 0x2C;
-	GPIO_PORTA_DEN_R |= 0x2C;
-	GPIO_PORTA_PCTL_R = (GPIO_PORTA_PCTL_R & 0xFF0F00FF) + 0x00202200;
-	GPIO_PORTA_AMSEL_R = 0;
-	SSI0_CR1_R = 0x0;
-	SSI0_CPSR_R = 0x02;
-	SSI0_CR0_R &= ~(0x0000FFF0);
-	SSI0_CR0_R |= 0x0F;
-	SSI0_DR_R = initialData;
-	SSI0_CR1_R |= 0x02;
+	SYSCTL_RCGCSSI_R |= 0x02;
+	SYSCTL_RCGCGPIO_R |= 0x08;
+	while((SYSCTL_PRGPIO_R & 0x08) == 0){};
+	GPIO_PORTD_AFSEL_R |= 0x0B;
+	GPIO_PORTD_DEN_R |= 0x0B;
+	GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R & 0xFFFF0F00) + 0x00002022;
+	GPIO_PORTD_AMSEL_R = 0;
+	SSI1_CR1_R = 0x0;
+	SSI1_CPSR_R = 0x02;
+	SSI1_CR0_R &= ~(0x0000FFF0);
+	SSI1_CR0_R |= 0x440;	//SCR = 4 SPO = 1 SPH = 0 Freescale mode
+	SSI1_CR0_R |= 0x0F;	//16 bit data
+	SSI1_DR_R = initialData;
+	SSI1_CR1_R |= 0x02;
 }
 
 /**
