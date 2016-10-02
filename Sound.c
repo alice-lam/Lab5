@@ -5,6 +5,11 @@
 #include "Sound.h"
 #include <math.h>
 
+#include <stdio.h>
+#include <stdint.h>
+
+int32_t ind=-1;
+
 const unsigned short Wave[64] = {
 	2048,2224,2399,2571,2737,2897,3048,3190,3321,3439,3545,3635,3711,3770,3813,3839,3848,3839,3813,3770,
 	3711,3635,3545,3439,3321,3190,3048,2897,2737,2571,2399,2224,2048,1872,1697,1525,1359,1199,1048,906,775,
@@ -33,7 +38,7 @@ Song currentSong;
 
 void Song_PlayInit(Song song) {
 	currentSong = song;
-	noteIndex = 0;
+	noteIndex = -1;
 	beatIndex = 0;
 }
 Note* Song_CurrentNote() {
@@ -90,7 +95,7 @@ Note maryhadalamb[] = {
 	{G0, Half}
 	
 };
-
+//test
 Notes HotLine[38] = {
 {D5,	EI,		0,		1}, 
 {D5,	EI,		EI,		1},
@@ -131,3 +136,16 @@ Notes HotLine[38] = {
 {F4,	EI,		QU,		2},
 {0,		0,		0,		0}
 };
+<<<<<<< HEAD
+=======
+
+Notes getNote(void){
+	noteIndex++;
+	return HotLine[noteIndex]; 
+}
+
+void decodeNote(Notes n){
+	// prestage next pitch
+	// prestage next inturrpts
+}
+>>>>>>> 62ea8a3d0dd41ced6d470ed09725c16d83701ca3

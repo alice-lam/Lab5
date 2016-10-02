@@ -65,6 +65,11 @@ void PortF_Init(void) {
 	GPIO_PORTF_AMSEL_R = 0;						// disable analog functionality on PF
 }
 
+void decodeNote(Notes n){
+	// prestage next pitch
+	// prestage next inturrpts
+}
+
 const Song testSong = {90, maryhadalamb};
 bool Play_mode = false;
 void Pause(void);
