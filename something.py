@@ -1,0 +1,55 @@
+#int getSine(int rad){
+#int deg = rad*57.32;
+#	int sign = -1;
+#	if(deg<0 || deg > 180)
+		#sign = 1;
+	#deg+=180;
+	#deg %= 180;
+	#int num = 4*deg*(180-deg);
+	#num*=1000*sign;
+	#int den = 40500 - deg*(180-deg);
+	#return num/den;
+#}
+
+#int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
+#	if(currentMill < totalMill/5){
+		#int scale = totalMill/8;
+#		int arg = scale * (currentMill +90);
+#		return getSine(arg);
+#	}
+#	else{
+#		int fourFifths = totalMill*4/5;
+#		int oneFifth = totalMill - fourFifths;
+#		double c = fourFifths/1.897;
+#		double x = (oneFifth-currentMill)/c;
+#		double value = exp(x);
+#		int ret = value*1000;
+#		return ret;
+#	}
+#}
+
+from math import exp
+from math import sin
+bpm = 135;
+qn = 60*1000/bpm;
+f = open('result.txt','w')
+	
+def scale(currentMill, totalMill): #//returns scale*1000
+	if(currentMill < totalMill/5):
+		scale = 8.0/totalMill;
+		print(scale);
+		arg = scale * (currentMill -90);
+		print(arg);
+		return (1.1+0.8*sin(arg))*1000;
+	else:
+		fourFifths = totalMill*4/5;
+		oneFifth = totalMill - fourFifths;
+		c = fourFifths/1.897;
+		x = (oneFifth-currentMill)/c;
+		value = exp(x);
+		return value*1000;
+		
+for i in range(qn):
+	f.write(str(i)+"	"+str(scale(i,qn))+"\n");
+
+f.close()

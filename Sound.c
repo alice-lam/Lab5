@@ -52,24 +52,15 @@ uint16_t Instrument_CurrentVoltage(uint32_t Index) {
 	return Wave[Index % 64];
 }
 
-int getSine(int rad){
-	int deg = rad*57.32;
-	int sign = -1;
-	if(deg<0 || deg > 180)
-		sign = 1;
-	deg+=180;
-	deg %= 180;
-	int num = 4*deg*(180-deg);
-	num*=1000*sign;
-	int den = 40500 - deg*(180-deg);
-	return num/den;
-}
-
 int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
-	if(currentMill > totalMill/5){
-		int scale = totalMill/8;
-		int arg = scale * (currentMill +90);
-		return getSine(arg);
+	if(currentMill < totalMill/5){
+		double scale = 8.0/totalMill;
+		int arg = scale * (currentMill -90);
+		double value = sin(arg);
+		double result = (1.1+0.8*value)*1000;
+		if(result>=1.0)
+			return 1000;
+		return result;
 	}
 	else{
 		int fourFifths = totalMill*4/5;
