@@ -1,6 +1,10 @@
+//Switch.c
+
 #include <stdint.h>
 #include "../inc/tm4c123gh6pm.h"
 #include "Switch.h"
+#include "Time.h"
+#include "boolean.h"
 #define DELAY10MS 160000
 bool debounce[4];
 void EnableInterrupts(void);  // Enable interrupts
@@ -84,6 +88,20 @@ uint32_t Button_Pressed(void){
 	SW=SWITCH;
 	SWITCH=0;
 return SW;
+}
+    
+
+void Buttons_Input(void) {
+	int32_t data = GPIO_PORTE_DATA_R;
+	
+	if((data & 0x01) != 0)
+		debounce[0] = (data & 0x01)*DELAY10MS;
+	if((data & 0x02) != 0)
+		debounce[1] = ((data & 0x2) >> 1)*DELAY10MS;
+	if((data & 0x04) != 0)
+		debounce[2] = ((data & 0x4) >> 2)*DELAY10MS;
+	if((data & 0x08) != 0)
+		debounce[3] = ((data & 0x8) >> 3)*DELAY10MS;
 }
 
 int32_t Buttons_Pressed(uint32_t button) {

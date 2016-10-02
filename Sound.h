@@ -1,7 +1,7 @@
 // Song.h
 // Runs on TM4C123
-#ifndef MUSIC_H
-#define MUSIC_H 1
+#ifndef Sound_H
+#define Sound_H 1
 
 #include <stdint.h>
 
@@ -17,13 +17,14 @@
 #define Eighth 2
 #define Sixteenth 1
 
-#define C
-#define D
-#define E
-#define F
-#define G
-#define A
-#define B
+#define C0	262
+#define D0	294
+#define E0	330
+#define F0	349
+#define G0	392
+#define A0	440
+#define B0	494
+#define C1	523
 
 typedef struct {
 	uint16_t pitch;    //frequency for note
@@ -36,7 +37,9 @@ typedef struct {
 	Note *notes;       //all of the notes in the song
 } Song;
 
-void Song_PlayInit(int song);
+void Song_PlayInit(Song song);
 void Song_PlayHandler(void);
+
+extern Note maryhadalamb[];
 
 #endif
