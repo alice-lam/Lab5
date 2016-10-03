@@ -79,6 +79,7 @@ void PortF_Init(void) {
 	GPIO_PORTF_AMSEL_R = 0;						// disable analog functionality on PF
 }
 
+<<<<<<< HEAD
 void decodeNote(Notes n){
 	// prestage next pitch
 	// prestage next inturrpts
@@ -119,13 +120,26 @@ int main(void){
 	Notes nextNote[3];
 	Notes lastNote[3];
 	// Initializations
+=======
+bool Play_mode = false;
+void Pause(void);
+extern Song HotLine;
+//debug codes
+int main(void){ 
+	int check = 0;
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 	DisableInterrupts();
   PLL_Init(Bus50MHz);								// bus clock at 50 MHz
 	PortF_Init();
   LEDS = 0;													// turn all LEDs off
 	DAC_Init(0);
 	Buttons_Init();
+<<<<<<< HEAD
 	//SysTick_Init2(0xffffffff);
+=======
+	Song_PlayInit(HotLine);
+	//SysTick_Init();
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 	//Timer0A_Init(&Song_PlayHandler, F20KHZ);	// initialize timer0A (20,000 Hz)
   //Timer0A_Init(&Song_PlayHandler, F16HZ);		// initialize timer0A (16 Hz)
 	Timer0A_Init(&Melody_PlayHandler, 0xffffffff);		// initialize timer0A (16 Hz)
@@ -137,6 +151,10 @@ int main(void){
 	//Song_PlayInit(testSong);
 	//Pause();
 	//check = Button_Pressed();
+		
+		
+		//these checks only run once on startup? They aren't in the while loop?
+		
 		
 		//Play
 		if (check==0x01){
@@ -160,7 +178,7 @@ int main(void){
 			NVIC_ST_CTRL_R = 0;
 			TIMER0_CTL_R = 0x00000000;
 			//startover
-			Song_PlayInit(testSong);
+			Song_PlayInit(HotLine);
 		}			
 	//Song init
 	//nextNote[0] = getNote(NEXT);

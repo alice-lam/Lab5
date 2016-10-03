@@ -112,7 +112,7 @@ typedef struct {
 
 typedef struct {
 	uint16_t tempo;    //beats per minute
-	Note *notes;       //all of the notes in the song
+	Notes* notes;       //all of the notes in the song
 } Song;
 
 void Song_PlayInit(Song song);

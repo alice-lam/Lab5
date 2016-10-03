@@ -35,25 +35,29 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
   1467,1515,1562,1610,1658,1706,1755,1803,1852,1901,1950,1999};
 
 uint32_t waveIndex = 0;
+<<<<<<< HEAD
 uint32_t harmIndex = 0;
 uint32_t meloIndex = 0;	
 int32_t noteIndex = -1;
+=======
+int32_t noteIndex = 0;
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 uint32_t beatIndex = 0;
+uint32_t startWaveIndex = 0;
 Song currentSong;
 	
 //Function Declaration	
 int32_t getWave(void);
 	
 void Song_PlayInit(Song song) {
-	currentSong = song;
-	noteIndex = -1;
-	beatIndex = 0;
-	waveIndex = 0;
-}
-Note* Song_CurrentNote() {
-	return &currentSong.notes[noteIndex];
+	currentSong = song;		//global copy of song
+	noteIndex = 0;			//current note in song
+	beatIndex = 0;	//unused?
+	waveIndex = 0;			//current part of instrument we are playing
+	startWaveIndex = 0;		//where we started in instrument
 }
 
+<<<<<<< HEAD
 int32_t getHarm(int32_t current){
 	if (!current){
 		harmIndex = (harmIndex+1) % 255;
@@ -101,6 +105,9 @@ uint16_t Instrument_CurrentVoltage(uint32_t Index) {
 }
 
 int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
+=======
+int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000 based on completion perecentage of Note
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 	if(currentMill < totalMill/5){
 		double scale = 8.0/totalMill;
 		int arg = scale * (currentMill -90);
@@ -121,6 +128,7 @@ int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
 	}
 }
 
+<<<<<<< HEAD
 Note maryhadalamb[] = {
 	
 	{E0, Quarter},
@@ -252,16 +260,86 @@ Notes getNote(int32_t peak){
 	noteIndex++;
 	return HotLine[noteIndex]; 
 	}
+=======
+Notes hotNotes[38] = {
+{D5,	EI,		0,		1}, 
+{D5,	EI,		EI,		1},
+{A3,	DHA,	0,		2},
+{D5,	EI,		EI,		1},
+{F5,	SI,		EI,		1},
+{E5,	SI,		SI,		1},
+{D5,	SI,		SI,		1},
+{C5,	SQ,		SI,		1},
+{D5,	EI,		90,		1},
+{A3,	EI,		0,		2},
+{A4,	DEI,	EI,		1},
+{A3,	QU,		0,		2},
+{G4,	SI,		DEI,	1},
+{G4,	EI,		DEI,	1},
+{BF3,	QU,		0,		2},
+{G4,	DEI,	EI,		1},
+{F4,	SI,		DEI,	1},
+{A3,	HA,		78,		2},
+{BF3,	DHA,	HA,		2},
+{D5,	EI,		168,	1},
+{A3,	EI,		0,		2},
+{D5,	EI,		EI,		1},
+{D4,	EI,		0,		2},
+{D5,	EI,		EI,		1},
+{D4,	EI,		0,		2},
+{F5,	SI,		EI,		1},
+{E5,	SI,		SI,		1},
+{D4,	QU,		0,		2},
+{D5,	SI,		SI,		1},
+{C5,	SI,		SI,		1},
+{E5,	QU,		SI,		1},
+{BF4,	DHA,	0,		2},
+{C5,	QU,		QU,		1},
+{F4,	EI,		HA,		2},
+{F4,	EI,		EI,		2},
+{F4,	EI,		QU,		2},
+{F4,	EI,		QU,		2},
+{0,		0,		0,		0}
+};
+
+Song HotLine = {135,hotNotes};
+
+Notes getNote(void){
+	return currentSong.notes[noteIndex]; 
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 }
+
+void Song_PlayHandler(void){
+	Notes n = getNote();								//grab current Note
+	int msPerBeat = 60000/currentSong.tempo;			//determine the ms tempo
+	int msPlayed = (waveIndex - startWaveIndex)*n.pitch;	//calc the time played
+	if(msPlayed >= msPerBeat*n.duration){				//if we are done with this note
+		noteIndex++;									//move to next Note
+		n = getNote();									//update local varaiable
+		startWaveIndex = waveIndex;						//update the start index
+		msPlayed = 0;									//we just started playing this note
+	}
+	int scale = Song_EnvelopeScale(msPlayed,msPerBeat*n.duration);	//calculate scale
+	int32_t w = getWave()*scale/1000;					//get the part of the wave to output, multiply by scale, divide by 1000 because scale is fixed point
+	DAC_Output(w);										//output to DAC
+}
+
 
 void decodeNotes(Notes n){
 	// prestage next pitch
 	
 	// prestage next inturrpts
+<<<<<<< HEAD
 
 	
 }
 int32_t getWave(void){
 	waveIndex = (waveIndex+1) % 63;
 	return SinTable[waveIndex];
+=======
+}
+int32_t getWave(void){
+	waveIndex++;
+	return SinTable[waveIndex%256];
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 }

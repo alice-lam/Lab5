@@ -16,6 +16,10 @@ void SysTick_Init2(uint32_t period);
 void Timer3_Init(void(*task)(void), unsigned long period);
 int32_t getFlag(void);
 void Timer0A_Init(void(*task)(void), uint32_t period);
+<<<<<<< HEAD
 void Timer1_Init(void(*task)(void), uint32_t period);
 void Timer2_Init(void(*task)(void), unsigned long period);
+=======
+
+>>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
 #endif
