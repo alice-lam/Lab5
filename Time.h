@@ -16,6 +16,5 @@ void SysTick_Init2(uint32_t period);
 
 
 void Timer0A_Init(void(*task)(void), uint32_t period);
-void Timer1_Init(void);
 
 #endif

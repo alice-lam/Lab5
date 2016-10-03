@@ -33,41 +33,23 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
   1467,1515,1562,1610,1658,1706,1755,1803,1852,1901,1950,1999};
 
 uint32_t waveIndex = 0;
-uint32_t noteIndex = 0;
+int32_t noteIndex = 0;
 uint32_t beatIndex = 0;
+uint32_t startWaveIndex = 0;
 Song currentSong;
 	
 //Function Declaration	
 int32_t getWave(void);
 	
 void Song_PlayInit(Song song) {
-	currentSong = song;
-	noteIndex = -1;
-	beatIndex = 0;
-	waveIndex = 0;
-}
-Note* Song_CurrentNote() {
-	return &currentSong.notes[noteIndex];
+	currentSong = song;		//global copy of song
+	noteIndex = 0;			//current note in song
+	beatIndex = 0;	//unused?
+	waveIndex = 0;			//current part of instrument we are playing
+	startWaveIndex = 0;		//where we started in instrument
 }
 
-void Song_PlayHandler(void){
-	uint16_t n = getWave();
-	DAC_Output(n);
-	
-	/*
-	Note currentNote = *Song_CurrentNote();
-	beatIndex += 1;
-	if(beatIndex >= currentNote.duration * 2) {
-		noteIndex += 1;
-		beatIndex = 0;
-	}
-	*/
-}
-uint16_t Instrument_CurrentVoltage(uint32_t Index) {
-	return Wave[Index % 64];
-}
-
-int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
+int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000 based on completion perecentage of Note
 	if(currentMill < totalMill/5){
 		double scale = 8.0/totalMill;
 		int arg = scale * (currentMill -90);
@@ -88,25 +70,7 @@ int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
 	}
 }
 
-Note maryhadalamb[] = {
-	
-	{E0, Quarter},
-	{D0, Quarter},
-	{C0, Quarter},
-	{D0, Quarter},
-	{E0, Quarter},
-	{E0, Quarter},
-	{E0, Half},
-	{D0, Quarter},
-	{D0, Quarter},
-	{D0, Half},
-	{E0, Quarter},
-	{G0, Quarter},
-	{G0, Half}
-	
-};
-//test
-Notes HotLine[38] = {
+Notes hotNotes[38] = {
 {D5,	EI,		0,		1}, 
 {D5,	EI,		EI,		1},
 {A3,	DHA,	0,		2},
@@ -146,26 +110,35 @@ Notes HotLine[38] = {
 {F4,	EI,		QU,		2},
 {0,		0,		0,		0}
 };
-<<<<<<< HEAD
-=======
+
+Song HotLine = {135,hotNotes};
 
 Notes getNote(void){
-	noteIndex++;
-	return HotLine[noteIndex]; 
+	return currentSong.notes[noteIndex]; 
 }
+
+void Song_PlayHandler(void){
+	Notes n = getNote();								//grab current Note
+	int msPerBeat = 60000/currentSong.tempo;			//determine the ms tempo
+	int msPlayed = (waveIndex - startWaveIndex)*n.pitch;	//calc the time played
+	if(msPlayed >= msPerBeat*n.duration){				//if we are done with this note
+		noteIndex++;									//move to next Note
+		n = getNote();									//update local varaiable
+		startWaveIndex = waveIndex;						//update the start index
+		msPlayed = 0;									//we just started playing this note
+	}
+	int scale = Song_EnvelopeScale(msPlayed,msPerBeat*n.duration);	//calculate scale
+	int32_t w = getWave()*scale/1000;					//get the part of the wave to output, multiply by scale, divide by 1000 because scale is fixed point
+	DAC_Output(w);										//output to DAC
+}
+
 
 void decodeNotes(Notes n){
 	// prestage next pitch
 	
 	// prestage next inturrpts
-<<<<<<< HEAD
-	
 }
 int32_t getWave(void){
-	waveIndex = (waveIndex+1) % 63;
-	return SinTable[waveIndex];
+	waveIndex++;
+	return SinTable[waveIndex%256];
 }
-=======
-}
->>>>>>> 62ea8a3d0dd41ced6d470ed09725c16d83701ca3
->>>>>>> origin/master
