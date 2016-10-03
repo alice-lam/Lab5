@@ -22,24 +22,24 @@ F (.\Switch.c)(0x57F15D06)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwo
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (../inc/tm4c123gh6pm.h)(0x57C5DB91)
 I (Switch.h)(0x57F15677)
-I (Time.h)(0x57F2D68D)
+I (Time.h)(0x57F2DE0B)
 I (boolean.h)(0x57F15677)
-F (.\main.c)(0x57F2D685)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+F (.\main.c)(0x57F2DE0B)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\main.o --omf_browse .\main.crf --depend .\main.d)
 I (..//inc//tm4c123gh6pm.h)(0x57C5DB91)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdbool.h)(0x51C87C24)
 I (PLL.h)(0x57F15677)
-I (Time.h)(0x57F2D68D)
+I (Time.h)(0x57F2DE0B)
 I (DAC.h)(0x57F15677)
 I (Switch.h)(0x57F15677)
-I (Sound.h)(0x57F2D695)
+I (Sound.h)(0x57F2DB3F)
 I (SysTick.h)(0x57F15677)
 F (.\Graphics.c)(0x57F15677)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\graphics.o --omf_browse .\graphics.crf --depend .\graphics.d)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (ST7735.h)(0x57F15677)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C87C24)
-F (.\Time.c)(0x57F2D68A)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\time.o --omf_browse .\time.crf --depend .\time.d)
+F (.\Time.c)(0x57F2DE0B)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\time.o --omf_browse .\time.crf --depend .\time.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdlib.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C87C24)
@@ -49,13 +49,13 @@ I (fixed.h)(0x57F15677)
 I (ST7735.h)(0x57F15677)
 I (C:\Keil\ARM\ARMCC\include\string.h)(0x51C87C24)
 F (.\Speaker.h)(0x57F15677)()
-F (.\Sound.c)(0x57F2D692)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\sound.o --omf_browse .\sound.crf --depend .\sound.d)
+F (.\Sound.c)(0x57F2DE0B)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\sound.o --omf_browse .\sound.crf --depend .\sound.d)
 I (DAC.h)(0x57F15677)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)
-I (Sound.h)(0x57F2D695)
+I (Sound.h)(0x57F2DB3F)
 I (C:\Keil\ARM\ARMCC\include\math.h)(0x51C87C24)
 I (C:\Keil\ARM\ARMCC\include\stdio.h)(0x51C87C24)
-F (.\Sound.h)(0x57F2D695)()
+F (.\Sound.h)(0x57F2DB3F)()
 F (.\DAC.h)(0x57F15677)()
 F (.\DAC.c)(0x57F1E00F)(-c --cpu Cortex-M4 -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\dac.o --omf_browse .\dac.crf --depend .\dac.d)
 I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C87C24)

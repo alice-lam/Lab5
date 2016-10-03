@@ -27,7 +27,7 @@ void (*PeriodicTask5)(void);   // user function
 int32_t count;
 int32_t alarmflag; 
 int32_t alarm1;
-<<<<<<< HEAD
+
 int flag = 0; 
 void Timer0A_Init1HzInt(void){
   volatile uint32_t delay;
@@ -49,9 +49,9 @@ void Timer0A_Init1HzInt(void){
   NVIC_PRI4_R = (NVIC_PRI4_R&0x00FFFFFF)|0x40000000; // top 3 bits
   NVIC_EN0_R = 1<<19;              // enable interrupt 19 in NVIC
 }
-=======
 
->>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
+
+
 // ***************** Timer0A_Init ****************
 // Activate TIMER0 interrupts to run user task periodically
 // Inputs:  task is a pointer to a user function
@@ -80,7 +80,6 @@ void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
   (*PeriodicTask1)();                // execute user task
 }
-<<<<<<< HEAD
 
 // **************SysTick_Init*********************
 // Initialize SysTick periodic interrupts
@@ -221,5 +220,3 @@ int32_t WakeUp(void){int32_t a;
 void UpdateAlarm(int32_t a){
 	alarm1 = a;
 }
-=======
->>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d

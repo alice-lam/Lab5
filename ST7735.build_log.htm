@@ -8,22 +8,31 @@ Project File Date:  10/03/2016
 
 <h2>Output:</h2>
 Build target 'ST7735'
+compiling PLL.c...
+compiling Speaker.c...
 compiling Switch.c...
 compiling main.c...
-main.c(111): warning:  #177-D: variable "timeOne" was declared but never referenced
+main.c(118): warning:  #177-D: variable "timeOne" was declared but never referenced
         int timeOne = 0;
-main.c(112): warning:  #177-D: variable "timeTwo" was declared but never referenced
+main.c(119): warning:  #177-D: variable "timeTwo" was declared but never referenced
         int timeTwo = 0;
-main.c(118): warning:  #177-D: variable "done" was declared but never referenced
+main.c(125): warning:  #177-D: variable "done" was declared but never referenced
         uint16_t done;
-main.c(120): warning:  #177-D: variable "lastNote" was declared but never referenced
+main.c(127): warning:  #177-D: variable "lastNote" was declared but never referenced
         Notes lastNote[3];
 main.c: 4 warnings, 0 errors
 compiling Time.c...
-Time.c(113): warning:  #177-D: variable "sr" was declared but never referenced
+Time.c(117): warning:  #177-D: variable "sr" was declared but never referenced
   void Timer1_Init(void(*task)(void), uint32_t period){long sr;
 Time.c: 1 warning, 0 errors
 compiling Sound.c...
-linking...
-Program Size: Code=3072 RO-data=40 RW-data=1344 ZI-data=1024  
-".\ST7735.axf" - 0 Error(s), 5 Warning(s).
+Sound.c(306): error:  #147: declaration is incompatible with "Notes HotLine[85]" (declared at line 150)
+  Song HotLine = {135,hotNotes};
+Sound.c(313): error:  #165: too few arguments in function call
+        Notes n = getNote();                                                            //grab current Note
+Sound.c(318): error:  #165: too few arguments in function call
+                n = getNote();                                                                  //update local varaiable
+Sound.c: 0 warnings, 3 errors
+compiling DAC.c...
+".\ST7735.axf" - 3 Error(s), 5 Warning(s).
+Target not created

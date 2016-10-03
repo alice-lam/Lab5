@@ -35,13 +35,13 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
   1467,1515,1562,1610,1658,1706,1755,1803,1852,1901,1950,1999};
 
 uint32_t waveIndex = 0;
-<<<<<<< HEAD
+
 uint32_t harmIndex = 0;
 uint32_t meloIndex = 0;	
 int32_t noteIndex = -1;
-=======
-int32_t noteIndex = 0;
->>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
+
+//int32_t noteIndex = 0;
+
 uint32_t beatIndex = 0;
 uint32_t startWaveIndex = 0;
 Song currentSong;
@@ -57,7 +57,7 @@ void Song_PlayInit(Song song) {
 	startWaveIndex = 0;		//where we started in instrument
 }
 
-<<<<<<< HEAD
+
 int32_t getHarm(int32_t current){
 	if (!current){
 		harmIndex = (harmIndex+1) % 255;
@@ -104,10 +104,10 @@ uint16_t Instrument_CurrentVoltage(uint32_t Index) {
 	return Wave[Index % 64];
 }
 
-int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
-=======
+//int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000
+
 int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000 based on completion perecentage of Note
->>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
+
 	if(currentMill < totalMill/5){
 		double scale = 8.0/totalMill;
 		int arg = scale * (currentMill -90);
@@ -128,7 +128,7 @@ int Song_EnvelopeScale(int currentMill, int totalMill){ //returns scale*1000 bas
 	}
 }
 
-<<<<<<< HEAD
+
 Note maryhadalamb[] = {
 	
 	{E0, Quarter},
@@ -260,7 +260,8 @@ Notes getNote(int32_t peak){
 	noteIndex++;
 	return HotLine[noteIndex]; 
 	}
-=======
+}
+
 Notes hotNotes[38] = {
 {D5,	EI,		0,		1}, 
 {D5,	EI,		EI,		1},
@@ -304,10 +305,9 @@ Notes hotNotes[38] = {
 
 Song HotLine = {135,hotNotes};
 
-Notes getNote(void){
-	return currentSong.notes[noteIndex]; 
->>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
-}
+//Notes getNote(void){
+//	return currentSong.notes[noteIndex]; 
+//}
 
 void Song_PlayHandler(void){
 	Notes n = getNote();								//grab current Note
@@ -329,17 +329,17 @@ void decodeNotes(Notes n){
 	// prestage next pitch
 	
 	// prestage next inturrpts
-<<<<<<< HEAD
+
 
 	
 }
 int32_t getWave(void){
-	waveIndex = (waveIndex+1) % 63;
+	waveIndex = (waveIndex+1) % 256;
 	return SinTable[waveIndex];
-=======
+
 }
-int32_t getWave(void){
-	waveIndex++;
-	return SinTable[waveIndex%256];
->>>>>>> 223e8af10f8c19834396b4569e362f9e8174420d
-}
+//int32_t getWave(void){
+//	waveIndex++;
+//	return SinTable[waveIndex%256];
+//
+//}
