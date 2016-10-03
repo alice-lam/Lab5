@@ -7,8 +7,11 @@ C:\Users\kinan\Documents\7.0 Courses 2016 Fall\EE 445L\Lab5\ST7735.uvproj
 Project File Date:  10/03/2016
 
 <h2>Output:</h2>
-Build target 'ST7735'
+Rebuild target 'ST7735'
+assembling startup.s...
 compiling PLL.c...
+compiling ST7735.c...
+compiling fixed.c...
 compiling Speaker.c...
 compiling Switch.c...
 compiling main.c...
@@ -21,6 +24,14 @@ main.c(125): warning:  #177-D: variable "done" was declared but never referenced
 main.c(127): warning:  #177-D: variable "lastNote" was declared but never referenced
         Notes lastNote[3];
 main.c: 4 warnings, 0 errors
+compiling Graphics.c...
+Graphics.c(690): warning:  #177-D: variable "lx" was declared but never referenced
+        int32_t lx;
+Graphics.c(691): warning:  #177-D: variable "ly" was declared but never referenced
+        int32_t ly;
+Graphics.c(887): warning:  #1-D: last line of file ends without a newline
+        
+Graphics.c: 3 warnings, 0 errors
 compiling Time.c...
 Time.c(117): warning:  #177-D: variable "sr" was declared but never referenced
   void Timer1_Init(void(*task)(void), uint32_t period){long sr;
@@ -34,5 +45,5 @@ Sound.c(318): error:  #165: too few arguments in function call
                 n = getNote();                                                                  //update local varaiable
 Sound.c: 0 warnings, 3 errors
 compiling DAC.c...
-".\ST7735.axf" - 3 Error(s), 5 Warning(s).
+".\ST7735.axf" - 3 Error(s), 8 Warning(s).
 Target not created
