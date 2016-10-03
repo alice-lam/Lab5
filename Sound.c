@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define CURRENT	1
+#define NEXT		0
 int32_t ind=-1;
 
 const unsigned short Wave[64] = {
@@ -33,7 +35,9 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
   1467,1515,1562,1610,1658,1706,1755,1803,1852,1901,1950,1999};
 
 uint32_t waveIndex = 0;
-uint32_t noteIndex = 0;
+uint32_t harmIndex = 0;
+uint32_t meloIndex = 0;	
+int32_t noteIndex = -1;
 uint32_t beatIndex = 0;
 Song currentSong;
 	
@@ -50,9 +54,38 @@ Note* Song_CurrentNote() {
 	return &currentSong.notes[noteIndex];
 }
 
-void Song_PlayHandler(void){
-	uint16_t n = getWave();
-	DAC_Output(n);
+int32_t getHarm(int32_t current){
+	if (!current){
+		harmIndex = (harmIndex+1) % 255;
+	}
+	return SinTable[harmIndex];
+}
+
+int32_t getMelo(int32_t current){
+	if (!current){
+		meloIndex = (meloIndex+1) % 255;
+	}
+	return SinTable[meloIndex];
+}
+
+void Melody_PlayHandler(void){
+	uint16_t melody = getMelo(NEXT);
+	uint16_t harmony = getHarm(CURRENT);
+	DAC_Output((melody+harmony)/2);
+	
+	/*
+	Note currentNote = *Song_CurrentNote();
+	beatIndex += 1;
+	if(beatIndex >= currentNote.duration * 2) {
+		noteIndex += 1;
+		beatIndex = 0;
+	}
+	*/
+}
+void Harmony_PlayHandler(void){
+	uint16_t melody = getMelo(CURRENT);
+	uint16_t harmony = getHarm(NEXT);
+	DAC_Output((melody+harmony)/2);
 	
 	/*
 	Note currentNote = *Song_CurrentNote();
@@ -106,66 +139,129 @@ Note maryhadalamb[] = {
 	
 };
 //test
-Notes HotLine[38] = {
-{D5,	EI,		0,		1}, 
-{D5,	EI,		EI,		1},
-{A3,	DHA,	0,		2},
-{D5,	EI,		EI,		1},
-{F5,	SI,		EI,		1},
-{E5,	SI,		SI,		1},
-{D5,	SI,		SI,		1},
-{C5,	SQ,		SI,		1},
-{D5,	EI,		90,		1},
-{A3,	EI,		0,		2},
-{A4,	DEI,	EI,		1},
-{A3,	QU,		0,		2},
-{G4,	SI,		DEI,	1},
-{G4,	EI,		DEI,	1},
-{BF3,	QU,		0,		2},
-{G4,	DEI,	EI,		1},
-{F4,	SI,		DEI,	1},
-{A3,	HA,		78,		2},
-{BF3,	DHA,	HA,		2},
-{D5,	EI,		168,	1},
-{A3,	EI,		0,		2},
-{D5,	EI,		EI,		1},
-{D4,	EI,		0,		2},
-{D5,	EI,		EI,		1},
-{D4,	EI,		0,		2},
-{F5,	SI,		EI,		1},
-{E5,	SI,		SI,		1},
-{D4,	QU,		0,		2},
-{D5,	SI,		SI,		1},
-{C5,	SI,		SI,		1},
-{E5,	QU,		SI,		1},
-{BF4,	DHA,	0,		2},
-{C5,	QU,		QU,		1},
-{F4,	EI,		HA,		2},
-{F4,	EI,		EI,		2},
-{F4,	EI,		QU,		2},
-{F4,	EI,		QU,		2},
-{0,		0,		0,		0}
-};
-<<<<<<< HEAD
-=======
+Notes HotLine[85] = {
+{D6,	EI,		EI,		1}, 
+{D6,	EI,		EI,		1},
+{A4,	DHA,	0,		2},
+{D6,	EI,		EI,		1},
+{F6,	EI,		EI,		1},
+{E6,	EI,		EI,		1},
+{D6,	EI,		EI,		1},
+{C6,	DQU,	EI,		1},
+//2
+{D6,	EI,		90,		1},
 
-Notes getNote(void){
+{A4,	EI,		0,		2},
+{A5,	DEI,	EI,		1},
+{A4,	QU,		0,		2},
+{G5,	SI,		DEI,	1},
+{G5,	EI,		DEI,	1},
+{BF4,	QU,		0,		2},
+{G5,	DEI,	EI,		1},
+{F5,	SI,		DEI,	1},
+
+//{C7,	HA,		78,		2}, //a4
+//{BF4,	DHA,	HA,		2},
+
+{D6,	EI,		168,	1},  //time till 168
+{A4,	EI,		0,		2},
+{D6,	EI,		EI,		1},
+{D5,	EI,		0,		2},
+{D6,	EI,		EI,		1},
+{D5,	EI,		0,		2},
+{F6,	EI,		EI,		1},
+{E6,	EI,		EI,		1},
+{D5,	QU,		0,		2},
+{D6,	EI,		EI,		1},
+{C6,	EI,		EI,		1},
+{E6,	QU,		EI,		1},
+{BF5,	DHA,	0,		2},
+{C6,	QU,		QU,		1},
+{F5,	EI,		HA,		2},
+{F5,	EI,		EI,		2},
+{F5,	EI,		QU,		2},
+{F5,	EI,		QU,		2},
+//{0,		0,		0,		0}
+{F6,	EI,		120,		1},
+{E6,	EI,		EI,		1},
+{D6,	EI,		EI,		1},
+{C6,	EI,		EI,		1},
+
+{E6,	HA,		EI,		1},
+{C6,	HA,		HA,		1},
+//
+{A5,	QU,		HA,		1},
+{F6,	EI,		HA,		1},
+{E6,	EI,		EI,		1},
+{D6,	EI,		EI,		1},
+{C6,	EI,		EI,		1},
+//p2
+{E6,	QU,		EI,		1},
+{C6,	QU,		QU,		1},
+
+{F6,	EI,		120,		1},
+{E6,	EI,		EI,		1},
+{D6,	EI,		EI,		1},
+{C6,	EI,		EI,		1},
+{E6,	HA,		EI,		1},
+{C6,	HA,		HA,		1},
+//HLB
+{A5,	QU,		HA,		1},
+{F6,	EI,		DQU,	1},
+{C7,	EI,		EI,		1},
+{C7,	EI,		EI,		1},
+{A6,	EI,		EI,		1},
+{A6,	EI,		EI,		1},
+//
+{C7,	EI,		EI,		1},
+{C7,	EI,		EI,		1},
+{D7,	QU,		EI,		1},
+//
+{F6,	EI,		120,	1},
+{A6,	EI,		EI,		1},
+{G6,	EI,		EI,		1},
+{F6,	EI,		EI,		1},
+{G6,	EI,		EI,		1},
+{G6,	EI,		EI,		1},
+{A6,	QU,		EI,		1},
+//
+{C7,	EI,		120,		1},
+{C7,	EI,		EI,		1},
+{C7,	EI,		EI,		1},
+{A6,	EI,		EI,		1},
+{C7,	EI,		EI,		1},
+{C7,	EI,		EI,		1},
+{D7,	QU,		EI,		1},
+//
+{F6,	EI,		120,	1},
+{A6,	EI,		EI,		1},
+{G6,	EI,		EI,		1},
+{F6,	EI,		EI,		1},
+{G6,	EI,		EI,		1},
+{G6,	EI,		EI,		1},
+{A6,	QU,		EI,		1},
+
+{A5,	QU,		HA,		1},
+};
+
+
+Notes getNote(int32_t peak){
+	if (peak){
+	return HotLine[noteIndex+1]; 
+	}else{
 	noteIndex++;
 	return HotLine[noteIndex]; 
+	}
 }
 
 void decodeNotes(Notes n){
 	// prestage next pitch
 	
 	// prestage next inturrpts
-<<<<<<< HEAD
+
 	
 }
 int32_t getWave(void){
 	waveIndex = (waveIndex+1) % 63;
 	return SinTable[waveIndex];
 }
-=======
-}
->>>>>>> 62ea8a3d0dd41ced6d470ed09725c16d83701ca3
->>>>>>> origin/master

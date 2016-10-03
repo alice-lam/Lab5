@@ -9,29 +9,87 @@ Project File Date:  10/02/2016
 <h2>Output:</h2>
 Build target 'ST7735'
 compiling main.c...
+main.c(111): warning:  #177-D: variable "timeOne" was declared but never referenced
+        int timeOne = 0;
+main.c(112): warning:  #177-D: variable "timeTwo" was declared but never referenced
+        int timeTwo = 0;
+main.c(118): warning:  #177-D: variable "done" was declared but never referenced
+        uint16_t done;
+main.c(120): warning:  #177-D: variable "lastNote" was declared but never referenced
+        Notes lastNote[3];
+main.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=2072 RO-data=40 RW-data=920 ZI-data=1024  
-".\ST7735.axf" - 0 Error(s), 0 Warning(s).
-Load "C:\\Users\\kinan\\Documents\\7.0 Courses 2016 Fall\\EE 445L\\Lab5\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Connection failed!, error code=&d
-Error: Flash Download failed  -  Target DLL has been cancelled
+Program Size: Code=3072 RO-data=40 RW-data=1344 ZI-data=1024  
+".\ST7735.axf" - 0 Error(s), 4 Warning(s).
+=JTAG, Speed=1000000Hz
+Erase Done.
+Programming Done.
+Verify OK.
+x" was declared but never referenced
+        int32_t lx;
+Graphics.c(691): warning:  #177-D: variable "ly" was declared but never referenced
+        int32_t ly;
+Graphics.c(887): warning:  #1-D: last line of file ends without a newline
+        
+Graphics.c: 3 warnings, 0 errors
+compiling Time.c...
+Time.c(113): warning:  #177-D: variable "sr" was declared but never referenced
+  void Timer1_Init(void(*task)(void), uint32_t period){long sr;
+Time.c: 1 warning, 0 errors
+compiling Sound.c...
+compiling DAC.c...
+linking...
+Program Size: Code=3084 RO-data=40 RW-data=896 ZI-data=1024  
+".\ST7735.axf" - 0 Error(s), 8 Warning(s).
+eriod){long sr;
+Time.c: 1 warning, 0 errors
+compiling Sound.c...
+compiling DAC.c...
+linking...
+Program Size: Code=2672 RO-data=40 RW-data=880 ZI-data=1024  
+".\ST7735.axf" - 0 Error(s), 10 Warning(s).
 Load "C:\\Users\\kinan\\Documents\\7.0 Courses 2016 Fall\\EE 445L\\Lab5\\ST7735.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-</pre>
-</body>
-</html>
-rget DLL has been cancelled
-Load "C:\\Users\\kinan\\Documents\\7.0 Courses 2016 Fall\\EE 445L\\Lab5\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
-Load "C:\\Users\\kinan\\Documents\\7.0 Courses 2016 Fall\\EE 445L\\Lab5\\ST7735.axf" 
-Connecting: Mode=JTAG, Speed=1000000Hz
-Erase Done.
-Programming Done.
-Verify OK.
+or note
+Sound.h(99): warning:  #177-D: variable "duration" was declared but never referenced
+        uint16_t duration; //number of beats for note
+Sound.h(101): error:  #77-D: this declaration has no storage class or type specifier
+  } Note;
+Sound.h(112): error:  #757: variable "Note" is not a type name
+        Note *notes;       //all of the notes in the song
+Sound.h(124): error:  #757: variable "Note" is not a type name
+  extern Note maryhadalamb[];
+main.c(129): warning:  #223-D: function "DAC_Init" declared implicitly
+        DAC_Init(0);
+main.c(134): warning:  #223-D: function "Timer0A_Init" declared implicitly
+        Timer0A_Init(&Melody_PlayHandler, 0xffffffff);          // initialize timer0A (16 Hz)
+main.c(135): warning:  #223-D: function "Timer1_Init" declared implicitly
+        Timer1_Init(&Harmony_PlayHandler, 0xffffffff);
+main.c(136): warning:  #223-D: function "Timer2_Init" declared implicitly
+        Timer2_Init(&Rest_Melo, 0xFFFFFFFF);
+main.c(116): warning:  #177-D: variable "timeOne" was declared but never referenced
+        int timeOne = 0;
+main.c(117): warning:  #550-D: variable "timeTwo" was set but never used
+        int timeTwo = 0;
+main.c(121): warning:  #177-D: variable "done" was declared but never referenced
+        uint16_t done;
+main.c: 11 warnings, 4 errors
+compiling Graphics.c...
+Graphics.c(690): warning:  #177-D: variable "lx" was declared but never referenced
+        int32_t lx;
+Graphics.c(691): warning:  #177-D: variable "ly" was declared but never referenced
+        int32_t ly;
+Graphics.c(887): warning:  #1-D: last line of file ends without a newline
+        
+Graphics.c: 3 warnings, 0 errors
+compiling Time.c...
+Time.c(107): warning:  #177-D: variable "sr" was declared but never referenced
+  void Timer1_Init(void(*task)(void), uint32_t period){long sr;
+Time.c: 1 warning, 0 errors
+compiling Sound.c...
+compiling DAC.c...
+".\ST7735.axf" - 10 Error(s), 18 Warning(s).
+Target not created

@@ -5,8 +5,11 @@ ARM Linker, 5.03 [Build 76] [MDK-ARM Professional]
 Section Cross References
 
     startup.o(RESET) refers to startup.o(STACK) for StackMem
+    startup.o(RESET) refers to time.o(i.SysTick_Handler) for SysTick_Handler
     startup.o(RESET) refers to switch.o(i.GPIOPortE_Handler) for GPIOPortE_Handler
     startup.o(RESET) refers to time.o(i.Timer0A_Handler) for Timer0A_Handler
+    startup.o(RESET) refers to time.o(i.Timer2A_Handler) for Timer2A_Handler
+    startup.o(RESET) refers to time.o(i.Timer3A_Handler) for Timer3A_Handler
     startup.o(RESET) refers to entry.o(.ARM.Collect$$$$00000000) for __main
     st7735.o(i.Output_Clear) refers to st7735.o(i.ST7735_FillScreen) for ST7735_FillScreen
     st7735.o(i.Output_Color) refers to st7735.o(i.ST7735_SetTextColor) for ST7735_SetTextColor
@@ -124,8 +127,16 @@ Section Cross References
     main.o(i.main) refers to dac.o(i.DAC_Init) for DAC_Init
     main.o(i.main) refers to switch.o(i.Buttons_Init) for Buttons_Init
     main.o(i.main) refers to time.o(i.Timer0A_Init) for Timer0A_Init
+    main.o(i.main) refers to time.o(i.Timer1_Init) for Timer1_Init
+    main.o(i.main) refers to time.o(i.Timer2_Init) for Timer2_Init
+    main.o(i.main) refers to time.o(i.Timer3_Init) for Timer3_Init
     main.o(i.main) refers to sound.o(i.Song_PlayInit) for Song_PlayInit
-    main.o(i.main) refers to sound.o(i.Song_PlayHandler) for Song_PlayHandler
+    main.o(i.main) refers to sound.o(i.getNote) for getNote
+    main.o(i.main) refers to time.o(i.getFlag) for getFlag
+    main.o(i.main) refers to sound.o(i.Melody_PlayHandler) for Melody_PlayHandler
+    main.o(i.main) refers to sound.o(i.Harmony_PlayHandler) for Harmony_PlayHandler
+    main.o(i.main) refers to main.o(i.Rest_Melo) for Rest_Melo
+    main.o(i.main) refers to main.o(i.Rest_Harm) for Rest_Harm
     main.o(i.main) refers to main.o(.data) for Play_mode
     main.o(i.main) refers to main.o(.constdata) for testSong
     main.o(.constdata) refers to sound.o(.data) for maryhadalamb
@@ -174,30 +185,43 @@ Section Cross References
     graphics.o(i.DrawSecond) refers to graphics.o(.data) for lSEC
     graphics.o(i.day) refers to st7735.o(i.ST7735_DrawCharS) for ST7735_DrawCharS
     graphics.o(i.night) refers to st7735.o(i.ST7735_DrawCharS) for ST7735_DrawCharS
+    time.o(i.SysTick_Handler) refers to time.o(.data) for flag
     time.o(i.SysTick_Init2) refers to startup.o(.text) for StartCritical
-    time.o(i.Timer0A_Handler) refers to time.o(.data) for PeriodicTask
+    time.o(i.Timer0A_Handler) refers to time.o(.data) for PeriodicTask1
     time.o(i.Timer0A_Init) refers to startup.o(.text) for StartCritical
-    time.o(i.Timer0A_Init) refers to time.o(.data) for PeriodicTask
+    time.o(i.Timer0A_Init) refers to time.o(.data) for PeriodicTask1
     time.o(i.Timer0A_Init1HzInt) refers to startup.o(.text) for DisableInterrupts
+    time.o(i.Timer1_Handler) refers to time.o(.data) for PeriodicTask2
+    time.o(i.Timer1_Init) refers to time.o(.data) for PeriodicTask2
+    time.o(i.Timer2A_Handler) refers to time.o(.data) for PeriodicTask3
+    time.o(i.Timer2_Init) refers to time.o(.data) for PeriodicTask3
+    time.o(i.Timer3A_Handler) refers to time.o(.data) for PeriodicTask4
+    time.o(i.Timer3_Init) refers to time.o(.data) for PeriodicTask4
     time.o(i.UpdateAlarm) refers to time.o(.data) for alarm1
     time.o(i.UpdateCount) refers to time.o(.data) for count
     time.o(i.WakeUp) refers to time.o(.data) for alarmflag
+    time.o(i.getFlag) refers to time.o(.data) for flag
     time.o(i.whattime) refers to time.o(.data) for count
+    sound.o(i.Harmony_PlayHandler) refers to sound.o(i.getMelo) for getMelo
+    sound.o(i.Harmony_PlayHandler) refers to sound.o(i.getHarm) for getHarm
+    sound.o(i.Harmony_PlayHandler) refers to dac.o(i.DAC_Output) for DAC_Output
     sound.o(i.Instrument_CurrentVoltage) refers to sound.o(.constdata) for Wave
+    sound.o(i.Melody_PlayHandler) refers to sound.o(i.getMelo) for getMelo
+    sound.o(i.Melody_PlayHandler) refers to sound.o(i.getHarm) for getHarm
+    sound.o(i.Melody_PlayHandler) refers to dac.o(i.DAC_Output) for DAC_Output
     sound.o(i.Song_CurrentNote) refers to sound.o(.data) for currentSong
-    sound.o(i.Song_EnvelopeScale) refers to sound.o(i.getSine) for getSine
     sound.o(i.Song_EnvelopeScale) refers to dflti.o(.text) for __aeabi_i2d
     sound.o(i.Song_EnvelopeScale) refers to ddiv.o(.text) for __aeabi_ddiv
-    sound.o(i.Song_EnvelopeScale) refers to exp.o(i.exp) for exp
     sound.o(i.Song_EnvelopeScale) refers to dmul.o(.text) for __aeabi_dmul
     sound.o(i.Song_EnvelopeScale) refers to dfixi.o(.text) for __aeabi_d2iz
-    sound.o(i.Song_PlayHandler) refers to sound.o(i.getWave) for getWave
-    sound.o(i.Song_PlayHandler) refers to dac.o(i.DAC_Output) for DAC_Output
+    sound.o(i.Song_EnvelopeScale) refers to sin.o(i.sin) for sin
+    sound.o(i.Song_EnvelopeScale) refers to dadd.o(.text) for __aeabi_dadd
+    sound.o(i.Song_EnvelopeScale) refers to cdrcmple.o(.text) for __aeabi_cdrcmple
+    sound.o(i.Song_EnvelopeScale) refers to exp.o(i.exp) for exp
     sound.o(i.Song_PlayInit) refers to sound.o(.data) for currentSong
-    sound.o(i.getNote) refers to sound.o(.data) for noteIndex
-    sound.o(i.getSine) refers to dflti.o(.text) for __aeabi_i2d
-    sound.o(i.getSine) refers to dmul.o(.text) for __aeabi_dmul
-    sound.o(i.getSine) refers to dfixi.o(.text) for __aeabi_d2iz
+    sound.o(i.getHarm) refers to sound.o(.data) for harmIndex
+    sound.o(i.getMelo) refers to sound.o(.data) for meloIndex
+    sound.o(i.getNote) refers to sound.o(.data) for HotLine
     sound.o(i.getWave) refers to sound.o(.data) for waveIndex
     cos.o(i.__softfp_cos) refers (Special) to iusefp.o(.text) for __I$use$fp
     cos.o(i.__softfp_cos) refers to cos.o(i.cos) for cos
@@ -285,6 +309,7 @@ Section Cross References
     dflti.o(.text) refers to depilogue.o(.text) for _double_epilogue
     dfixi.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     dfixi.o(.text) refers to llushr.o(.text) for __aeabi_llsr
+    cdrcmple.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     cos_i.o(i.__kernel_cos) refers (Special) to iusefp.o(.text) for __I$use$fp
     cos_i.o(i.__kernel_cos) refers to dfixi.o(.text) for __aeabi_d2iz
     cos_i.o(i.__kernel_cos) refers to dmul.o(.text) for __aeabi_dmul
@@ -412,6 +437,7 @@ Removing Unused input sections from the image.
     Removing switch.o(i.DisableButtonInterrupts), (32 bytes).
     Removing switch.o(i.EnableButtonInterrupts), (32 bytes).
     Removing switch.o(.bss), (16 bytes).
+    Removing main.o(i.Change_Notes), (2 bytes).
     Removing main.o(i.decodeNote), (2 bytes).
     Removing main.o(i.playSin), (2 bytes).
     Removing graphics.o(i.DigitalHour), (76 bytes).
@@ -429,30 +455,29 @@ Removing Unused input sections from the image.
     Removing graphics.o(.data), (12 bytes).
     Removing time.o(i.SysTick_Init2), (56 bytes).
     Removing time.o(i.Timer0A_Init1HzInt), (120 bytes).
-    Removing time.o(i.Timer1_Init), (88 bytes).
+    Removing time.o(i.Timer1_Handler), (24 bytes).
     Removing time.o(i.UpdateAlarm), (12 bytes).
     Removing time.o(i.UpdateCount), (12 bytes).
     Removing time.o(i.WakeUp), (16 bytes).
     Removing time.o(i.whattime), (12 bytes).
     Removing sound.o(i.Instrument_CurrentVoltage), (20 bytes).
     Removing sound.o(i.Song_CurrentNote), (24 bytes).
-    Removing sound.o(i.Song_EnvelopeScale), (152 bytes).
+    Removing sound.o(i.Song_EnvelopeScale), (280 bytes).
     Removing sound.o(i.decodeNotes), (2 bytes).
-    Removing sound.o(i.getNote), (36 bytes).
-    Removing sound.o(i.getSine), (108 bytes).
+    Removing sound.o(i.getWave), (40 bytes).
     Removing sound.o(.constdata), (128 bytes).
     Removing dadd.o(.text), (334 bytes).
     Removing dmul.o(.text), (228 bytes).
     Removing ddiv.o(.text), (222 bytes).
     Removing dflti.o(.text), (34 bytes).
     Removing dfixi.o(.text), (62 bytes).
+    Removing cdrcmple.o(.text), (40 bytes).
     Removing depilogue.o(.text), (190 bytes).
     Removing dscalb.o(.text), (46 bytes).
     Removing cdcmple.o(.text), (40 bytes).
-    Removing cdrcmple.o(.text), (40 bytes).
     Removing dfltui.o(.text), (26 bytes).
 
-106 unused section(s) (total 32361 bytes) removed from the image.
+106 unused section(s) (total 32323 bytes) removed from the image.
 
 ==============================================================================
 
@@ -465,21 +490,21 @@ Image Symbol Table
     RESET                                    0x00000000   Section      644  startup.o(RESET)
     ../clib/../cmprslib/zerorunl2.c          0x00000000   Number         0  __dczerorl2.o ABSOLUTE
     ../clib/microlib/errno.c                 0x00000000   Number         0  errno.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
-    ../clib/microlib/longlong.c              0x00000000   Number         0  llshl.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llushr.o ABSOLUTE
+    ../clib/microlib/longlong.c              0x00000000   Number         0  llshl.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llsshr.o ABSOLUTE
     ../clib/microlib/stubs.s                 0x00000000   Number         0  iusefp.o ABSOLUTE
     ../fplib/microlib/fpadd.c                0x00000000   Number         0  dadd.o ABSOLUTE
@@ -500,8 +525,8 @@ Image Symbol Table
     ../mathlib/poly.c                        0x00000000   Number         0  poly.o ABSOLUTE
     ../mathlib/qnan.c                        0x00000000   Number         0  qnan.o ABSOLUTE
     ../mathlib/rred.c                        0x00000000   Number         0  rred.o ABSOLUTE
-    ../mathlib/sin.c                         0x00000000   Number         0  sin_x.o ABSOLUTE
     ../mathlib/sin.c                         0x00000000   Number         0  sin.o ABSOLUTE
+    ../mathlib/sin.c                         0x00000000   Number         0  sin_x.o ABSOLUTE
     ../mathlib/sin_i.c                       0x00000000   Number         0  sin_i_x.o ABSOLUTE
     ../mathlib/sin_i.c                       0x00000000   Number         0  sin_i.o ABSOLUTE
     DAC.c                                    0x00000000   Number         0  dac.o ABSOLUTE
@@ -538,24 +563,36 @@ Image Symbol Table
     i.DAC_Output                             0x00000498   Section        0  dac.o(i.DAC_Output)
     i.DelayWait10ms                          0x000004a4   Section        0  switch.o(i.DelayWait10ms)
     i.GPIOPortE_Handler                      0x000004c4   Section        0  switch.o(i.GPIOPortE_Handler)
-    i.PLL_Init                               0x00000570   Section        0  pll.o(i.PLL_Init)
-    i.PortF_Init                             0x000005ec   Section        0  main.o(i.PortF_Init)
-    i.Song_PlayHandler                       0x00000654   Section        0  sound.o(i.Song_PlayHandler)
-    i.Song_PlayInit                          0x00000664   Section        0  sound.o(i.Song_PlayInit)
-    i.Timer0A_Handler                        0x00000694   Section        0  time.o(i.Timer0A_Handler)
-    i.Timer0A_Init                           0x000006ac   Section        0  time.o(i.Timer0A_Init)
-    i.__scatterload_copy                     0x00000720   Section       14  handlers.o(i.__scatterload_copy)
-    i.__scatterload_null                     0x0000072e   Section        2  handlers.o(i.__scatterload_null)
-    i.__scatterload_zeroinit                 0x00000730   Section       14  handlers.o(i.__scatterload_zeroinit)
-    i.getWave                                0x00000740   Section        0  sound.o(i.getWave)
-    i.main                                   0x00000768   Section        0  main.o(i.main)
-    .constdata                               0x00000818   Section        8  main.o(.constdata)
+    i.Harmony_PlayHandler                    0x00000570   Section        0  sound.o(i.Harmony_PlayHandler)
+    i.Melody_PlayHandler                     0x00000592   Section        0  sound.o(i.Melody_PlayHandler)
+    i.PLL_Init                               0x000005b4   Section        0  pll.o(i.PLL_Init)
+    i.PortF_Init                             0x00000630   Section        0  main.o(i.PortF_Init)
+    i.Rest_Harm                              0x00000698   Section        0  main.o(i.Rest_Harm)
+    i.Rest_Melo                              0x000006a8   Section        0  main.o(i.Rest_Melo)
+    i.Song_PlayInit                          0x000006b8   Section        0  sound.o(i.Song_PlayInit)
+    i.SysTick_Handler                        0x000006e8   Section        0  time.o(i.SysTick_Handler)
+    i.Timer0A_Handler                        0x00000704   Section        0  time.o(i.Timer0A_Handler)
+    i.Timer0A_Init                           0x0000071c   Section        0  time.o(i.Timer0A_Init)
+    i.Timer1_Init                            0x00000790   Section        0  time.o(i.Timer1_Init)
+    i.Timer2A_Handler                        0x000007f0   Section        0  time.o(i.Timer2A_Handler)
+    i.Timer2_Init                            0x00000808   Section        0  time.o(i.Timer2_Init)
+    i.Timer3A_Handler                        0x00000868   Section        0  time.o(i.Timer3A_Handler)
+    i.Timer3_Init                            0x00000880   Section        0  time.o(i.Timer3_Init)
+    i.__scatterload_copy                     0x000008e0   Section       14  handlers.o(i.__scatterload_copy)
+    i.__scatterload_null                     0x000008ee   Section        2  handlers.o(i.__scatterload_null)
+    i.__scatterload_zeroinit                 0x000008f0   Section       14  handlers.o(i.__scatterload_zeroinit)
+    i.getFlag                                0x00000900   Section        0  time.o(i.getFlag)
+    i.getHarm                                0x00000924   Section        0  sound.o(i.getHarm)
+    i.getMelo                                0x00000950   Section        0  sound.o(i.getMelo)
+    i.getNote                                0x0000097c   Section        0  sound.o(i.getNote)
+    i.main                                   0x000009bc   Section        0  main.o(i.main)
+    .constdata                               0x00000c00   Section        8  main.o(.constdata)
     .data                                    0x20000000   Section        8  switch.o(.data)
-    .data                                    0x20000008   Section        1  main.o(.data)
-    .data                                    0x2000000c   Section       16  time.o(.data)
-    .data                                    0x2000001c   Section      892  sound.o(.data)
-    STACK                                    0x20000398   Section     1024  startup.o(STACK)
-    StackMem                                 0x20000398   Data           0  startup.o(STACK)
+    .data                                    0x20000008   Section       20  main.o(.data)
+    .data                                    0x2000001c   Section       40  time.o(.data)
+    .data                                    0x20000044   Section     1276  sound.o(.data)
+    STACK                                    0x20000540   Section     1024  startup.o(STACK)
+    StackMem                                 0x20000540   Data           0  startup.o(STACK)
 
     Global Symbols
 
@@ -577,7 +614,6 @@ Image Symbol Table
     SVC_Handler                              0x0000027b   Thumb Code     2  startup.o(RESET)
     DebugMon_Handler                         0x0000027d   Thumb Code     2  startup.o(RESET)
     PendSV_Handler                           0x0000027f   Thumb Code     2  startup.o(RESET)
-    SysTick_Handler                          0x00000281   Thumb Code     2  startup.o(RESET)
     ADC0Seq0_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
     ADC0Seq1_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
     ADC0Seq2_Handler                         0x00000283   Thumb Code     0  startup.o(RESET)
@@ -658,9 +694,7 @@ Image Symbol Table
     Timer0B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
     Timer1A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
     Timer1B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
-    Timer2A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
     Timer2B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
-    Timer3A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
     Timer3B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
     Timer4A_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
     Timer4B_Handler                          0x00000283   Thumb Code     0  startup.o(RESET)
@@ -713,39 +747,63 @@ Image Symbol Table
     DAC_Output                               0x00000499   Thumb Code     6  dac.o(i.DAC_Output)
     DelayWait10ms                            0x000004a5   Thumb Code    32  switch.o(i.DelayWait10ms)
     GPIOPortE_Handler                        0x000004c5   Thumb Code   148  switch.o(i.GPIOPortE_Handler)
-    PLL_Init                                 0x00000571   Thumb Code   118  pll.o(i.PLL_Init)
-    PortF_Init                               0x000005ed   Thumb Code    88  main.o(i.PortF_Init)
-    Song_PlayHandler                         0x00000655   Thumb Code    16  sound.o(i.Song_PlayHandler)
-    Song_PlayInit                            0x00000665   Thumb Code    30  sound.o(i.Song_PlayInit)
-    Timer0A_Handler                          0x00000695   Thumb Code    16  time.o(i.Timer0A_Handler)
-    Timer0A_Init                             0x000006ad   Thumb Code    94  time.o(i.Timer0A_Init)
-    __scatterload_copy                       0x00000721   Thumb Code    14  handlers.o(i.__scatterload_copy)
-    __scatterload_null                       0x0000072f   Thumb Code     2  handlers.o(i.__scatterload_null)
-    __scatterload_zeroinit                   0x00000731   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
-    getWave                                  0x00000741   Thumb Code    30  sound.o(i.getWave)
-    main                                     0x00000769   Thumb Code   152  main.o(i.main)
-    testSong                                 0x00000818   Data           8  main.o(.constdata)
-    Region$$Table$$Base                      0x00000820   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000840   Number         0  anon$$obj.o(Region$$Table)
+    Harmony_PlayHandler                      0x00000571   Thumb Code    34  sound.o(i.Harmony_PlayHandler)
+    Melody_PlayHandler                       0x00000593   Thumb Code    34  sound.o(i.Melody_PlayHandler)
+    PLL_Init                                 0x000005b5   Thumb Code   118  pll.o(i.PLL_Init)
+    PortF_Init                               0x00000631   Thumb Code    88  main.o(i.PortF_Init)
+    Rest_Harm                                0x00000699   Thumb Code    10  main.o(i.Rest_Harm)
+    Rest_Melo                                0x000006a9   Thumb Code    10  main.o(i.Rest_Melo)
+    Song_PlayInit                            0x000006b9   Thumb Code    30  sound.o(i.Song_PlayInit)
+    SysTick_Handler                          0x000006e9   Thumb Code    18  time.o(i.SysTick_Handler)
+    Timer0A_Handler                          0x00000705   Thumb Code    16  time.o(i.Timer0A_Handler)
+    Timer0A_Init                             0x0000071d   Thumb Code    94  time.o(i.Timer0A_Init)
+    Timer1_Init                              0x00000791   Thumb Code    74  time.o(i.Timer1_Init)
+    Timer2A_Handler                          0x000007f1   Thumb Code    16  time.o(i.Timer2A_Handler)
+    Timer2_Init                              0x00000809   Thumb Code    76  time.o(i.Timer2_Init)
+    Timer3A_Handler                          0x00000869   Thumb Code    16  time.o(i.Timer3A_Handler)
+    Timer3_Init                              0x00000881   Thumb Code    74  time.o(i.Timer3_Init)
+    __scatterload_copy                       0x000008e1   Thumb Code    14  handlers.o(i.__scatterload_copy)
+    __scatterload_null                       0x000008ef   Thumb Code     2  handlers.o(i.__scatterload_null)
+    __scatterload_zeroinit                   0x000008f1   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
+    getFlag                                  0x00000901   Thumb Code    32  time.o(i.getFlag)
+    getHarm                                  0x00000925   Thumb Code    36  sound.o(i.getHarm)
+    getMelo                                  0x00000951   Thumb Code    36  sound.o(i.getMelo)
+    getNote                                  0x0000097d   Thumb Code    54  sound.o(i.getNote)
+    main                                     0x000009bd   Thumb Code   518  main.o(i.main)
+    testSong                                 0x00000c00   Data           8  main.o(.constdata)
+    Region$$Table$$Base                      0x00000c08   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00000c28   Number         0  anon$$obj.o(Region$$Table)
     SW1                                      0x20000000   Data           1  switch.o(.data)
     SW2                                      0x20000001   Data           1  switch.o(.data)
     SW3                                      0x20000002   Data           1  switch.o(.data)
     SW4                                      0x20000003   Data           1  switch.o(.data)
     SWITCH                                   0x20000004   Data           4  switch.o(.data)
     Play_mode                                0x20000008   Data           1  main.o(.data)
-    PeriodicTask                             0x2000000c   Data           4  time.o(.data)
-    count                                    0x20000010   Data           4  time.o(.data)
-    alarmflag                                0x20000014   Data           4  time.o(.data)
-    alarm1                                   0x20000018   Data           4  time.o(.data)
-    ind                                      0x2000001c   Data           4  sound.o(.data)
-    SinTable                                 0x20000020   Data         512  sound.o(.data)
-    waveIndex                                0x20000220   Data           4  sound.o(.data)
-    noteIndex                                0x20000224   Data           4  sound.o(.data)
-    beatIndex                                0x20000228   Data           4  sound.o(.data)
-    maryhadalamb                             0x2000022c   Data          52  sound.o(.data)
-    HotLine                                  0x20000260   Data         304  sound.o(.data)
-    currentSong                              0x20000390   Data           8  sound.o(.data)
-    __initial_sp                             0x20000798   Data           0  startup.o(STACK)
+    harmFreq                                 0x2000000c   Data           4  main.o(.data)
+    meloFreq                                 0x20000010   Data           4  main.o(.data)
+    harmDur                                  0x20000014   Data           4  main.o(.data)
+    meloDur                                  0x20000018   Data           4  main.o(.data)
+    flag                                     0x2000001c   Data           4  time.o(.data)
+    PeriodicTask1                            0x20000020   Data           4  time.o(.data)
+    PeriodicTask2                            0x20000024   Data           4  time.o(.data)
+    PeriodicTask3                            0x20000028   Data           4  time.o(.data)
+    PeriodicTask4                            0x2000002c   Data           4  time.o(.data)
+    PeriodicTask5                            0x20000030   Data           4  time.o(.data)
+    count                                    0x20000034   Data           4  time.o(.data)
+    alarmflag                                0x20000038   Data           4  time.o(.data)
+    alarm1                                   0x2000003c   Data           4  time.o(.data)
+    tmp                                      0x20000040   Data           4  time.o(.data)
+    ind                                      0x20000044   Data           4  sound.o(.data)
+    SinTable                                 0x20000048   Data         512  sound.o(.data)
+    waveIndex                                0x20000248   Data           4  sound.o(.data)
+    harmIndex                                0x2000024c   Data           4  sound.o(.data)
+    meloIndex                                0x20000250   Data           4  sound.o(.data)
+    noteIndex                                0x20000254   Data           4  sound.o(.data)
+    beatIndex                                0x20000258   Data           4  sound.o(.data)
+    maryhadalamb                             0x2000025c   Data          52  sound.o(.data)
+    HotLine                                  0x20000290   Data         680  sound.o(.data)
+    currentSong                              0x20000538   Data           8  sound.o(.data)
+    __initial_sp                             0x20000940   Data           0  startup.o(STACK)
 
 
 
@@ -755,62 +813,73 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000bd8, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x00000ab4])
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00001168, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x00000ed8])
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000840, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000c28, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000284   Code   RO            3  * RESET               startup.o
-    0x00000284   0x00000000   Code   RO          772  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
-    0x00000284   0x00000004   Code   RO          806    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
-    0x00000288   0x00000004   Code   RO          809    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
-    0x0000028c   0x00000000   Code   RO          811    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
-    0x0000028c   0x00000000   Code   RO          813    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
-    0x0000028c   0x00000008   Code   RO          814    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
-    0x00000294   0x00000000   Code   RO          816    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
-    0x00000294   0x00000000   Code   RO          818    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
-    0x00000294   0x00000004   Code   RO          807    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x00000284   0x00000000   Code   RO          844  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
+    0x00000284   0x00000004   Code   RO          880    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x00000288   0x00000004   Code   RO          883    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x0000028c   0x00000000   Code   RO          885    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x0000028c   0x00000000   Code   RO          887    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
+    0x0000028c   0x00000008   Code   RO          888    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
+    0x00000294   0x00000000   Code   RO          890    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
+    0x00000294   0x00000000   Code   RO          892    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
+    0x00000294   0x00000004   Code   RO          881    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
     0x00000298   0x0000001c   Code   RO            4    .text               startup.o
-    0x000002b4   0x00000024   Code   RO          842    .text               mc_w.l(init.o)
-    0x000002d8   0x0000005c   Code   RO          854    .text               mc_w.l(__dczerorl2.o)
+    0x000002b4   0x00000024   Code   RO          914    .text               mc_w.l(init.o)
+    0x000002d8   0x0000005c   Code   RO          926    .text               mc_w.l(__dczerorl2.o)
     0x00000334   0x000000b8   Code   RO          393    i.Buttons_Init      switch.o
-    0x000003ec   0x000000ac   Code   RO          728    i.DAC_Init          dac.o
-    0x00000498   0x0000000c   Code   RO          729    i.DAC_Output        dac.o
+    0x000003ec   0x000000ac   Code   RO          800    i.DAC_Init          dac.o
+    0x00000498   0x0000000c   Code   RO          801    i.DAC_Output        dac.o
     0x000004a4   0x00000020   Code   RO          396    i.DelayWait10ms     switch.o
     0x000004c4   0x000000ac   Code   RO          399    i.GPIOPortE_Handler  switch.o
-    0x00000570   0x0000007c   Code   RO           12    i.PLL_Init          pll.o
-    0x000005ec   0x00000068   Code   RO          461    i.PortF_Init        main.o
-    0x00000654   0x00000010   Code   RO          664    i.Song_PlayHandler  sound.o
-    0x00000664   0x00000030   Code   RO          665    i.Song_PlayInit     sound.o
-    0x00000694   0x00000018   Code   RO          589    i.Timer0A_Handler   time.o
-    0x000006ac   0x00000074   Code   RO          590    i.Timer0A_Init      time.o
-    0x00000720   0x0000000e   Code   RO          848    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x0000072e   0x00000002   Code   RO          849    i.__scatterload_null  mc_w.l(handlers.o)
-    0x00000730   0x0000000e   Code   RO          850    i.__scatterload_zeroinit  mc_w.l(handlers.o)
-    0x0000073e   0x00000002   PAD
-    0x00000740   0x00000028   Code   RO          669    i.getWave           sound.o
-    0x00000768   0x000000b0   Code   RO          463    i.main              main.o
-    0x00000818   0x00000008   Data   RO          465    .constdata          main.o
-    0x00000820   0x00000020   Data   RO          846    Region$$Table       anon$$obj.o
+    0x00000570   0x00000022   Code   RO          721    i.Harmony_PlayHandler  sound.o
+    0x00000592   0x00000022   Code   RO          723    i.Melody_PlayHandler  sound.o
+    0x000005b4   0x0000007c   Code   RO           12    i.PLL_Init          pll.o
+    0x00000630   0x00000068   Code   RO          462    i.PortF_Init        main.o
+    0x00000698   0x00000010   Code   RO          463    i.Rest_Harm         main.o
+    0x000006a8   0x00000010   Code   RO          464    i.Rest_Melo         main.o
+    0x000006b8   0x00000030   Code   RO          726    i.Song_PlayInit     sound.o
+    0x000006e8   0x0000001c   Code   RO          606    i.SysTick_Handler   time.o
+    0x00000704   0x00000018   Code   RO          608    i.Timer0A_Handler   time.o
+    0x0000071c   0x00000074   Code   RO          609    i.Timer0A_Init      time.o
+    0x00000790   0x00000060   Code   RO          612    i.Timer1_Init       time.o
+    0x000007f0   0x00000018   Code   RO          613    i.Timer2A_Handler   time.o
+    0x00000808   0x00000060   Code   RO          614    i.Timer2_Init       time.o
+    0x00000868   0x00000018   Code   RO          615    i.Timer3A_Handler   time.o
+    0x00000880   0x00000060   Code   RO          616    i.Timer3_Init       time.o
+    0x000008e0   0x0000000e   Code   RO          920    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x000008ee   0x00000002   Code   RO          921    i.__scatterload_null  mc_w.l(handlers.o)
+    0x000008f0   0x0000000e   Code   RO          922    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x000008fe   0x00000002   PAD
+    0x00000900   0x00000024   Code   RO          620    i.getFlag           time.o
+    0x00000924   0x0000002c   Code   RO          728    i.getHarm           sound.o
+    0x00000950   0x0000002c   Code   RO          729    i.getMelo           sound.o
+    0x0000097c   0x00000040   Code   RO          730    i.getNote           sound.o
+    0x000009bc   0x00000244   Code   RO          466    i.main              main.o
+    0x00000c00   0x00000008   Data   RO          468    .constdata          main.o
+    0x00000c08   0x00000020   Data   RO          918    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Base: 0x20000000, Size: 0x00000398, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x00000274])
+    Execution Region ER_RW (Base: 0x20000000, Size: 0x00000540, Max: 0xffffffff, ABSOLUTE, COMPRESSED[0x000002b0])
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000000   0x00000008   Data   RW          401    .data               switch.o
-    0x20000008   0x00000001   Data   RW          466    .data               main.o
-    0x20000009   0x00000003   PAD
-    0x2000000c   0x00000010   Data   RW          597    .data               time.o
-    0x2000001c   0x0000037c   Data   RW          671    .data               sound.o
+    0x20000008   0x00000014   Data   RW          469    .data               main.o
+    0x2000001c   0x00000028   Data   RW          622    .data               time.o
+    0x20000044   0x000004fc   Data   RW          733    .data               sound.o
 
 
-    Execution Region ER_ZI (Base: 0x20000398, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Base: 0x20000540, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000398   0x00000400   Zero   RW            1    STACK               startup.o
+    0x20000540   0x00000400   Zero   RW            1    STACK               startup.o
 
 
 ==============================================================================
@@ -821,17 +890,17 @@ Image component sizes
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
        184         28          0          0          0        836   dac.o
-       280         40          8          1          0       3056   main.o
+       716         90          8         20          0       4506   main.o
        124          6          0          0          0       4635   pll.o
-       104         28          0        892          0       3256   sound.o
+       268         44          0       1276          0       4804   sound.o
        672        622          0          0       1024        908   startup.o
        388         62          0          8          0       2333   switch.o
-       140         30          0         16          0       1643   time.o
+       540        124          0         40          0       4951   time.o
 
     ----------------------------------------------------------------------
-      1892        816         40        920       1024      16667   Object Totals
+      2892        976         40       1344       1024      22973   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         0          0          0          3          0          0   (incl. Padding)
+         0          0          0          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -869,15 +938,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2072        832         40        920       1024      16215   Grand Totals
-      2072        832         40        628       1024      16215   ELF Image Totals (compressed)
-      2072        832         40        628          0          0   ROM Totals
+      3072        992         40       1344       1024      21897   Grand Totals
+      3072        992         40        688       1024      21897   ELF Image Totals (compressed)
+      3072        992         40        688          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2112 (   2.06kB)
-    Total RW  Size (RW Data + ZI Data)              1944 (   1.90kB)
-    Total ROM Size (Code + RO Data + RW Data)       2740 (   2.68kB)
+    Total RO  Size (Code + RO Data)                 3112 (   3.04kB)
+    Total RW  Size (RW Data + ZI Data)              2368 (   2.31kB)
+    Total ROM Size (Code + RO Data + RW Data)       3800 (   3.71kB)
 
 ==============================================================================
 

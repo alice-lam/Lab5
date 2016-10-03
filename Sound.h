@@ -21,8 +21,9 @@
 #define	QHE			84 	// Q + H + E
 #define DHA			72	// Dotted Half Q + H
 #define HA 			48 	// Half 
+#define DQU			36	// dotted quarter
 #define TQ			32 	// Triplet Quarter, 	
-#define SQ    		30  // Sixteenth tied to quarter
+#define SQ    	30  // Sixteenth tied to quarter
 #define QU 			24 	// Quarter 	
 #define DEI			18	// Dotted Eigth (Eight + Sixteenth)
 #define EI 			12 	// Eighth,  	
@@ -32,7 +33,9 @@
 #define TH 			3		// Thirty-Second
 
 
-
+//#define EF7  628   // 1244.5 Hz
+#define D7   333   // 1174.7 Hz
+#define DF7  352   // 1108.7 Hz
 #define C7   373   // 2093 Hz
 #define B6   395   // 1975.5 Hz
 #define BF6  419   // 1864.7 Hz
@@ -113,7 +116,11 @@ typedef struct {
 } Song;
 
 void Song_PlayInit(Song song);
-void Song_PlayHandler(void);
+//void Song_PlayHandler(void);
+void Melody_PlayHandler(void);
+void Harmony_PlayHandler(void);
+int32_t getWave(void);
+Notes getNote(int32_t);
 
 int Song_EnvelopeScale(int currentMill, int totalMill);
 
