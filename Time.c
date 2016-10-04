@@ -24,34 +24,7 @@ void (*PeriodicTask3)(void);   // user function
 void (*PeriodicTask4)(void);   // user function
 void (*PeriodicTask5)(void);   // user function
 
-int32_t count;
-int32_t alarmflag; 
-int32_t alarm1;
-
 int flag = 0; 
-void Timer0A_Init1HzInt(void){
-  volatile uint32_t delay;
-  DisableInterrupts();
-  // **** general initialization ****
-  SYSCTL_RCGCTIMER_R |= 0x01;      // activate timer0
-  delay = SYSCTL_RCGCTIMER_R;      // allow time to finish activating
-  TIMER0_CTL_R &= ~TIMER_CTL_TAEN; // disable timer0A during setup
-  TIMER0_CFG_R = 0;                // configure for 32-bit timer mode
-  // **** timer0A initialization ****
-                                   // configure for periodic mode
-  TIMER0_TAMR_R = TIMER_TAMR_TAMR_PERIOD;
-  TIMER0_TAILR_R = 29999999;         // start value for 1 Hz interrupts 79 999 999
-  TIMER0_IMR_R |= TIMER_IMR_TATOIM;// enable timeout (rollover) interrupt
-  TIMER0_ICR_R = TIMER_ICR_TATOCINT;// clear timer0A timeout flag
-  TIMER0_CTL_R |= TIMER_CTL_TAEN;  // enable timer0A 32-b, periodic, interrupts
-  // **** interrupt initialization ****
-                                   // Timer0A=priority 2
-  NVIC_PRI4_R = (NVIC_PRI4_R&0x00FFFFFF)|0x40000000; // top 3 bits
-  NVIC_EN0_R = 1<<19;              // enable interrupt 19 in NVIC
-}
-
-
-
 // ***************** Timer0A_Init ****************
 // Activate TIMER0 interrupts to run user task periodically
 // Inputs:  task is a pointer to a user function
@@ -114,7 +87,8 @@ void SysTick_Handler(void){
 // Inputs:  task is a pointer to a user function
 //          period in units (1/clockfreq)
 // Outputs: none
-void Timer1_Init(void(*task)(void), uint32_t period){long sr;
+void Timer1_Init(void(*task)(void), uint32_t period){
+	volatile long sr;
 	//sr =StartCritical();
   SYSCTL_RCGCTIMER_R |= 0x02;   // 0) activate TIMER1
 	PeriodicTask2 = task;          // user function
@@ -201,22 +175,4 @@ void Timer3_Init(void(*task)(void), unsigned long period){
 void Timer3A_Handler(void){
   TIMER3_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
   (*PeriodicTask4)();                // execute user task
-}
-
-
-
-
-int32_t whattime(void){
-	return count;
-}
-void UpdateCount(int32_t newval){
-	count = newval;
-}
-int32_t WakeUp(void){int32_t a;
-	a = alarmflag; //flag seen
-	alarmflag = 0;
-	return a;
-}
-void UpdateAlarm(int32_t a){
-	alarm1 = a;
 }
