@@ -175,8 +175,6 @@ void nextNoteHandler(){
 		meloDuration = (next.duration)*tick - 10000;	//clock cycles // *20 =ns
 		TIMER0_TAILR_R = (50000000/256)/melFreq;
 		TIMER1_TAILR_R = (50000000/256)/harmFreq;
-		TIMER0_CTL_R = 0x00000001;    // 10) enable TIMER0A
-		TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
 		harmIndex%=256;
 		harmStart=harmIndex;
 		meloIndex%=256;
@@ -187,16 +185,12 @@ void nextNoteHandler(){
 	else if (next.channel == 1){		// if not both then pick either mel or harm based on channel. 
 		melFreq = next.pitch;
 		TIMER0_TAILR_R = (50000000/256)/melFreq;
-		TIMER0_CTL_R = 0x00000001;    // 10) enable TIMER0A
-		//TIMER1_CTL_R = 0x00000000;    // 10) enable TIMER1A
 		meloIndex%=256;
 		meloStart=meloIndex;
 		meloDuration = (next.duration)*tick - 10000;
 	}else if(next.channel == 2){
 		harmFreq = next.pitch;
 		TIMER1_TAILR_R = (50000000/256)/harmFreq;
-		//TIMER0_CTL_R = 0x00000000;    // 10) enable TIMER0A
-		TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
 		harmIndex%=256;
 		harmStart=harmIndex;
 		harmDuration = (next.duration)*tick - 10000;

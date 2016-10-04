@@ -87,30 +87,32 @@ int main(void){
 	
 	EnableInterrupts();
 	
-	//Play
-	if (check==0x01){
-		NVIC_ST_CTRL_R = 0x07;
-		TIMER0_CTL_R = 0x00000001;
-		NVIC_ST_RELOAD_R = 500;
-	}
-	
-	//Pause
-	if (check==0x02){
-		NVIC_ST_CTRL_R = 0;
-		TIMER0_CTL_R = 0x00000000;
-	}
-	
-	//Rewind
-	if (check==0x04){
-		//pause
-		NVIC_ST_CTRL_R = 0;
-		TIMER0_CTL_R = 0x00000000;
-		//startover
-		Song_PlayInit();
-	}			
-	//END OF SONG PLAY LOOP
 	while(1){
 		LEDS ^= RED;
-		for(int i = 0; i < 1000000; i += 1);	
+		check = Button_Pressed();
+		//Play
+		if (check==0x01){
+			TIMER2_CTL_R = 0x00000001;
+			TIMER0_CTL_R = 0x00000001;
+			TIMER1_CTL_R = 0x00000001;
+		}
+		
+		//Pause
+		if (check==0x02){
+			TIMER2_CTL_R = 0x00000000;
+			TIMER0_CTL_R = 0x00000000;
+			TIMER1_CTL_R = 0x00000000;
+		}
+		
+		//Rewind
+		if (check==0x04){
+			//pause
+			TIMER2_CTL_R = 0x00000000;
+			TIMER0_CTL_R = 0x00000000;
+			TIMER1_CTL_R = 0x00000000;
+			//startover
+			Song_PlayInit();
+		}			
+		//END OF SONG PLAY LOOP	
 	}
 }
