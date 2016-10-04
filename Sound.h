@@ -97,6 +97,9 @@
 #define B0	494
 #define C1	523
 
+
+extern uint32_t tick;
+
 typedef struct {
 	uint16_t pitch;    //frequency for note
 	uint16_t duration; //number of beats for note
@@ -110,6 +113,8 @@ typedef struct {
 	uint16_t channel;				// 1 or 2
 } Notes;
 
+extern Notes nextNote[3];
+
 typedef struct {
 	uint16_t tempo;    //beats per minute
 	Notes* notes;       //all of the notes in the song
@@ -121,6 +126,10 @@ void Melody_PlayHandler(void);
 void Harmony_PlayHandler(void);
 int32_t getWave(void);
 Notes getNote(int32_t);
+Notes getCurrentNote(void);
+void setHarmDuration(int duration);
+void setMeloDuration(int duration);
+
 
 int Song_EnvelopeScale(int currentMill, int totalMill);
 

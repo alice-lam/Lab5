@@ -3,6 +3,7 @@
 
 #include "DAC.h"
 #include "Sound.h"
+#include "..//inc//tm4c123gh6pm.h"
 #include <math.h>
 
 #include <stdio.h>
@@ -39,6 +40,8 @@ uint32_t waveIndex = 0;
 uint32_t harmIndex = 0;
 uint32_t meloIndex = 0;	
 int32_t noteIndex = -1;
+int harmDuration = 0;
+int meloDuration = 0;
 
 //int32_t noteIndex = 0;
 
@@ -60,21 +63,28 @@ void Song_PlayInit(Song song) {
 
 int32_t getHarm(int32_t current){
 	if (!current){
-		harmIndex = (harmIndex+1) % 255;
+		harmIndex++;
 	}
-	return SinTable[harmIndex];
+	return SinTable[harmIndex%256];
 }
 
 int32_t getMelo(int32_t current){
 	if (!current){
-		meloIndex = (meloIndex+1) % 255;
+		meloIndex++;
 	}
-	return SinTable[meloIndex];
+	return SinTable[meloIndex%256];
 }
 
 void Melody_PlayHandler(void){
 	uint16_t melody = getMelo(NEXT);
 	uint16_t harmony = getHarm(CURRENT);
+	
+	int elapsed = meloDuration - TIMER2_TAILR_R;
+	melody*=Song_EnvelopeScale(elapsed,meloDuration)/1000;
+	
+	elapsed = harmDuration - TIMER3_TAILR_R;
+	harmony*=Song_EnvelopeScale(elapsed,harmDuration)/1000;
+	
 	DAC_Output((melody+harmony)/2);
 	
 	/*
@@ -89,6 +99,13 @@ void Melody_PlayHandler(void){
 void Harmony_PlayHandler(void){
 	uint16_t melody = getMelo(CURRENT);
 	uint16_t harmony = getHarm(NEXT);
+	
+	int elapsed = meloDuration - TIMER2_TAILR_R;
+	melody*=Song_EnvelopeScale(elapsed,meloDuration)/1000;
+	
+	elapsed = harmDuration - TIMER3_TAILR_R;
+	harmony*=Song_EnvelopeScale(elapsed,harmDuration)/1000;	
+	
 	DAC_Output((melody+harmony)/2);
 	
 	/*
@@ -303,19 +320,19 @@ Notes hotNotes[38] = {
 {0,		0,		0,		0}
 };
 
-Song HotLine = {135,hotNotes};
+Song HotLineS = {135,hotNotes};
 
-//Notes getNote(void){
-//	return currentSong.notes[noteIndex]; 
-//}
+Notes getCurrentNote(void){
+	return currentSong.notes[noteIndex]; 
+}
 
 void Song_PlayHandler(void){
-	Notes n = getNote();								//grab current Note
+	Notes n = getCurrentNote();								//grab current Note
 	int msPerBeat = 60000/currentSong.tempo;			//determine the ms tempo
 	int msPlayed = (waveIndex - startWaveIndex)*n.pitch;	//calc the time played
 	if(msPlayed >= msPerBeat*n.duration){				//if we are done with this note
 		noteIndex++;									//move to next Note
-		n = getNote();									//update local varaiable
+		n = getCurrentNote();									//update local varaiable
 		startWaveIndex = waveIndex;						//update the start index
 		msPlayed = 0;									//we just started playing this note
 	}
@@ -333,6 +350,15 @@ void decodeNotes(Notes n){
 
 	
 }
+
+void setHarmDuration(int duration){
+	harmDuration = duration;
+}
+
+void setMeloDuration(int duration){
+	meloDuration = duration;
+}
+
 int32_t getWave(void){
 	waveIndex = (waveIndex+1) % 256;
 	return SinTable[waveIndex];

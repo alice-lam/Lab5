@@ -121,7 +121,7 @@ int main(void){
 	volatile uint32_t tmptime=0;
 	int32_t times;
 	int32_t channelSelect = 0;
-	uint32_t tick = (60000000000/(TEMPO*24))/20;
+	uint32_t tick = (60000000000/(TEMPO*24))/20;	//one of the 96 divisions
 	uint16_t done;
 	Notes nextNote[3];
 	Notes lastNote[3];
@@ -246,17 +246,26 @@ int main(void){
 		//Execute Event
 		if (channelSelect == CH1){
 				TIMER0_TAILR_R = nextNote[0].pitch;
-				TIMER2_TAILR_R = (nextNote[0].duration)*tick - 10000;	//set rest
+				int duration = (nextNote[0].duration)*tick - 10000;
+				TIMER2_TAILR_R =  duration;	//set rest
+				setMeloDuration(duration);
 				//TIMER2_CTL_R = 0x00000001;
 		}else if (channelSelect == CH2){
 				TIMER1_TAILR_R = nextNote[0].pitch;
-				TIMER3_TAILR_R = (nextNote[0].duration)*tick - 10000;	//set rest
+				int duration = (nextNote[0].duration)*tick - 10000;
+				TIMER3_TAILR_R = duration;	//set rest
+				setHarmDuration(duration);
 				//TIMER3_CTL_R = 0x00000001;
 		}else if (channelSelect == BOTH){
 				TIMER0_TAILR_R = nextNote[0].pitch;
 				TIMER1_TAILR_R = nextNote[1].pitch;
-				TIMER2_TAILR_R = (nextNote[0].duration)*tick - 10000;	//set rest
-				TIMER3_TAILR_R = (nextNote[1].duration)*tick - 10000;	//set rest
+				
+				int duration = (nextNote[0].duration)*tick - 10000;
+				TIMER2_TAILR_R = duration;	//set rest
+				setMeloDuration(duration);
+				duration = (nextNote[1].duration)*tick - 10000;
+				TIMER3_TAILR_R = duration;	//set rest
+				setHarmDuration(duration);
 				//TIMER2_CTL_R = 0x00000001;
 				//TIMER3_CTL_R = 0x00000001;
 		}
