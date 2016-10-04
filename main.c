@@ -81,7 +81,8 @@ int main(void){
 	LEDS = 0;													// turn all LEDs off
 	DAC_Init(0);
 	Buttons_Init();
-	Timer1_Init(&PlayHandler, 0xffffffff);
+	Timer1_Init(&HHandler, 0xffffffff);
+	Timer0A_Init(&MHandler, 0xffffffff);
 	Song_PlayInit();
 	
 	EnableInterrupts();

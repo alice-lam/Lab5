@@ -13,7 +13,7 @@
 #define CURRENT	1
 #define NEXT	0
 //CHANGE SPEED OF SONG, set faster/slower TEMPO
-#define TEMPO  180
+#define TEMPO  150
 
 const unsigned short Wave[64] = {
 	2048,2224,2399,2571,2737,2897,3048,3190,3321,3439,3545,3635,3711,3770,3813,3839,3848,3839,3813,3770,
@@ -149,8 +149,14 @@ int meloDuration = 0;
 int harmFreq = 1;
 int melFreq = 1;
 int32_t noteIndex = 0;
-int handlerCount;
-int handlerFreq;
+
+int meloStart;
+int melody;
+int harmStart;
+int harmony;
+int temp;
+int scale;
+
 uint32_t tick = (60000000000/(TEMPO*24))/20;	//one of the 96 divisions
 
 Notes* currentSong;
@@ -164,25 +170,35 @@ void nextNoteHandler(){
 	// Channel Select
 	if (future.timetill == 0){				// if both, harmony and melody will need to be updated. 
 		harmFreq = future.pitch;
-		harmDuration = (future.duration)*tick - 10000;
 		melFreq = next.pitch;
-		meloDuration = (next.duration)*tick - 10000;
-		handlerFreq = melFreq*harmFreq;
-		TIMER1_TAILR_R = (50000000/256)/handlerFreq;
-		handlerCount=0;
+		harmDuration = (future.duration)*tick - 10000;
+		meloDuration = (next.duration)*tick - 10000;	//clock cycles // *20 =ns
+		TIMER0_TAILR_R = (50000000/256)/melFreq;
+		TIMER1_TAILR_R = (50000000/256)/harmFreq;
+		TIMER0_CTL_R = 0x00000001;    // 10) enable TIMER0A
+		TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
+		harmIndex%=256;
+		harmStart=harmIndex;
+		meloIndex%=256;
+		meloStart=meloIndex;
 		future = getNote(NEXT);
+		TIMER2_TAILR_R = future.timetill*tick;
 	}
 	else if (next.channel == 1){		// if not both then pick either mel or harm based on channel. 
 		melFreq = next.pitch;
-		handlerFreq = melFreq*harmFreq;
-		TIMER1_TAILR_R = handlerFreq;
-		handlerCount=0;
+		TIMER0_TAILR_R = (50000000/256)/melFreq;
+		TIMER0_CTL_R = 0x00000001;    // 10) enable TIMER0A
+		//TIMER1_CTL_R = 0x00000000;    // 10) enable TIMER1A
+		meloIndex%=256;
+		meloStart=meloIndex;
 		meloDuration = (next.duration)*tick - 10000;
 	}else if(next.channel == 2){
 		harmFreq = next.pitch;
-		handlerFreq = melFreq*harmFreq;
-		TIMER1_TAILR_R = handlerFreq;
-		handlerCount=0;
+		TIMER1_TAILR_R = (50000000/256)/harmFreq;
+		//TIMER0_CTL_R = 0x00000000;    // 10) enable TIMER0A
+		TIMER1_CTL_R = 0x00000001;    // 10) enable TIMER1A
+		harmIndex%=256;
+		harmStart=harmIndex;
 		harmDuration = (next.duration)*tick - 10000;
 	}
 }
@@ -200,25 +216,30 @@ void Song_PlayInit() {
 
 
 int32_t getHarm(){
-	return SinTable[harmIndex];
+	return SinTable[harmIndex%256];
 }
 
 int32_t getMelo(){
-	return SinTable[meloIndex];
+	return SinTable[meloIndex%256];
 }
 
-void PlayHandler(void){
-	int elapsed = handlerCount*handlerFreq;
-	if((elapsed%melFreq<=1||elapsed%melFreq>=melFreq-1) && melFreq!=1){
-		meloIndex = (meloIndex+1)%256;
-	}
-	else if(harmFreq!=1){
-		harmIndex = (harmIndex+1)%256;
-	}
-	int melody = getMelo()*Song_EnvelopeScale(elapsed,meloDuration,0)/1000;
-	int harmony = getHarm()*Song_EnvelopeScale(elapsed,meloDuration,1)/1000;
+void MHandler(void){
+	temp = (meloIndex-meloStart)*melFreq;
+	meloIndex = meloIndex+1;
+	melody = getMelo();
+	//scale = Song_EnvelopeScale(temp,meloDuration,0);
+	//melody *= scale;
+	//melody /=1000;
+	//melody = getMelo();
 	DAC_Output((melody+harmony)/2);
-	handlerCount++;
+}
+
+void HHandler(void){
+	int elapsed = (harmIndex-harmStart)*harmFreq;
+	harmIndex = harmIndex+1;
+	//harmony = getHarm()*Song_EnvelopeScale(elapsed,harmDuration,1)/1000;
+	harmony = getHarm();
+	DAC_Output((melody+harmony)/2);
 }
 
 int Song_EnvelopeScale(int currentMill, int totalMill, int isHarm){ //returns scale*1000 based on completion perecentage of Note
@@ -237,7 +258,7 @@ int Song_EnvelopeScale(int currentMill, int totalMill, int isHarm){ //returns sc
 		int arg = scale * (currentMill -90);
 		double value = sin(arg);
 		double result = (1.1+0.8*value)*1000;
-		if(result>=1.0)
+		if(result>=1000.0)
 			return 1000;
 		return result;
 	}
@@ -254,7 +275,7 @@ int Song_EnvelopeScale(int currentMill, int totalMill, int isHarm){ //returns sc
 
 Notes getNote(int32_t peak){
 	if (peak){
-	return HotLine[noteIndex+1]; 
+	return HotLine[noteIndex]; 
 	}else{
 	noteIndex++;
 	return HotLine[noteIndex]; 
