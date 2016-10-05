@@ -456,16 +456,6 @@
               <FilePath>.\startup.s</FilePath>
             </File>
             <File>
-              <FileName>Switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Switch.c</FilePath>
-            </File>
-            <File>
-              <FileName>Switch.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Switch.h</FilePath>
-            </File>
-            <File>
               <FileName>Time.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Time.c</FilePath>

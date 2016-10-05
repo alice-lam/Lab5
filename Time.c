@@ -23,8 +23,8 @@ void (*PeriodicTask2)(void);   // user function
 void (*PeriodicTask3)(void);   // user function
 void (*PeriodicTask4)(void);   // user function
 void (*PeriodicTask5)(void);   // user function
+void (*PeriodicTask6)(void);   // user function
 
-int flag = 0; 
 // ***************** Timer0A_Init ****************
 // Activate TIMER0 interrupts to run user task periodically
 // Inputs:  task is a pointer to a user function
@@ -41,7 +41,7 @@ void Timer0A_Init(void(*task)(void), uint32_t period){long sr;
   TIMER0_TAPR_R = 0;            // 5) bus clock resolution
   TIMER0_ICR_R = 0x00000001;    // 6) clear TIMER0A timeout flag
   TIMER0_IMR_R = 0x00000001;    // 7) arm timeout interrupt
-  NVIC_PRI4_R = (NVIC_PRI4_R&0x00FFFFFF)|0x80000000; // 8) priority 4
+  NVIC_PRI4_R = (NVIC_PRI4_R&0x00FFFFFF)|0x40000000; // 8) priority 2
 // interrupts enabled in the main program after all devices initialized
 // vector number 35, interrupt number 19
   NVIC_EN0_R = 1<<19;           // 9) enable IRQ 19 in NVIC
@@ -52,34 +52,6 @@ void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
   (*PeriodicTask1)();                // execute user task
 }
-
-// **************SysTick_Init*********************
-// Initialize SysTick periodic interrupts
-// Input: interrupt period
-//        Units of period are 12.5ns (assuming 50 MHz clock)
-//        Maximum is 2^24-1
-//        Minimum is determined by length of ISR
-// Output: none
-void SysTick_Init2(uint32_t period){
-  volatile long sr;
-  sr = StartCritical();
-  NVIC_ST_CTRL_R = 0;         // disable SysTick during setup
-  NVIC_ST_RELOAD_R = period-1;// reload value
-  NVIC_ST_CURRENT_R = 0;      // any write to current clears it
-  NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R&0x00FFFFFF)|0x40000000; // priority 2
-                              // enable SysTick with core clock and interrupts
-  NVIC_ST_CTRL_R = 0x07;
-  //EndCritical(sr);
-}
-uint32_t tmp;
-void SysTick_Handler(void){
-	//clear systickflag?? 
-	flag = 1;  
-	tmp = NVIC_ST_CURRENT_R;
-}
-
-	
-
 
 // ***************** TIMER1_Init ****************
 // Activate TIMER1 interrupts to run user task periodically
@@ -96,7 +68,7 @@ void Timer1_Init(void(*task)(void), uint32_t period){
   TIMER1_TAPR_R = 0;            // 5) bus clock resolution
   TIMER1_ICR_R = 0x00000001;    // 6) clear TIMER1A timeout flag
   TIMER1_IMR_R = 0x00000001;    // 7) arm timeout interrupt
-  NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF00FF)|0x00008000; // 8) priority 4
+  NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF00FF)|0x00006000; // 8) priority 3
 // interrupts enabled in the main program after all devices initialized
 // vector number 37, interrupt number 21
   NVIC_EN0_R = 1<<21;           // 9) enable IRQ 21 in NVIC
@@ -123,7 +95,7 @@ void Timer2_Init(void(*task)(void), unsigned long period){
   TIMER2_TAPR_R = 0;            // 5) bus clock resolution
   TIMER2_ICR_R = 0x00000001;    // 6) clear timer2A timeout flag
   TIMER2_IMR_R = 0x00000001;    // 7) arm timeout interrupt
-  NVIC_PRI5_R = (NVIC_PRI5_R&0x00FFFFFF)|0x40000000; // 8) priority 2
+  NVIC_PRI5_R = (NVIC_PRI5_R&0x00FFFFFF)|0x20000000; // 8) priority 1
 // interrupts enabled in the main program after all devices initialized
 // vector number 39, interrupt number 23
   NVIC_EN0_R = 1<<23;           // 9) enable IRQ 23 in NVIC
@@ -134,18 +106,6 @@ void Timer2A_Handler(void){
   (*PeriodicTask3)();                // execute user task
 }
 
-int32_t getFlag(void){
-	if (flag==0){
-		return 0;
-	}else if(flag==1){
-		flag=0;
-		return 1;
-	}
-	return  0;
-}
-
-
-
 // ***************** Timer3_Init ****************
 // Activate Timer3 interrupts to run user task periodically
 // Inputs:  task is a pointer to a user function
@@ -153,7 +113,7 @@ int32_t getFlag(void){
 // Outputs: none
 void Timer3_Init(void(*task)(void), unsigned long period){
   SYSCTL_RCGCTIMER_R |= 0x08;   // 0) activate TIMER3
-  PeriodicTask4 = task;          // user function
+  PeriodicTask4 = task;   
   TIMER3_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
   TIMER3_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
   TIMER3_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
@@ -165,10 +125,64 @@ void Timer3_Init(void(*task)(void), unsigned long period){
 // interrupts enabled in the main program after all devices initialized
 // vector number 51, interrupt number 35
   NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
-  TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
+  //TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
 }
 
 void Timer3A_Handler(void){
   TIMER3_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
-  (*PeriodicTask4)();                // execute user task
+  (*PeriodicTask4)();    
+}
+
+// ***************** Timer3_Init ****************
+// Activate Timer3 interrupts to run user task periodically
+// Inputs:  task is a pointer to a user function
+//          period in units (1/clockfreq)
+// Outputs: none
+void Timer4_Init(void(*task)(void), unsigned long period){
+  SYSCTL_RCGCTIMER_R |= 0x10;   // 0) activate TIMER3
+  PeriodicTask5 = task;   
+  TIMER4_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
+  TIMER4_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER4_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
+  TIMER4_TAILR_R = period-1;    // 4) reload value
+  TIMER4_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER4_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
+  TIMER4_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI17_R = (NVIC_PRI17_R&0xFFFFFF00)|0x000000A0; // 8) priority 5
+// interrupts enabled in the main program after all devices initialized
+// vector number 51, interrupt number 35
+  NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
+  //TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
+}
+
+void Timer4A_Handler(void){
+  TIMER4_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
+  (*PeriodicTask5)();    
+}
+
+// ***************** Timer3_Init ****************
+// Activate Timer3 interrupts to run user task periodically
+// Inputs:  task is a pointer to a user function
+//          period in units (1/clockfreq)
+// Outputs: none
+void Timer5_Init(void(*task)(void), unsigned long period){
+  SYSCTL_RCGCTIMER_R |= 0x20;   // 0) activate TIMER3
+  PeriodicTask6 = task;   
+  TIMER5_CTL_R = 0x00000000;    // 1) disable TIMER3A during setup
+  TIMER5_CFG_R = 0x00000000;    // 2) configure for 32-bit mode
+  TIMER5_TAMR_R = 0x00000002;   // 3) configure for periodic mode, default down-count settings
+  TIMER5_TAILR_R = period-1;    // 4) reload value
+  TIMER5_TAPR_R = 0;            // 5) bus clock resolution
+  TIMER5_ICR_R = 0x00000001;    // 6) clear TIMER3A timeout flag
+  TIMER5_IMR_R = 0x00000001;    // 7) arm timeout interrupt
+  NVIC_PRI23_R = (NVIC_PRI23_R&0x00FFFFFF)|0xB0000000; // 8) priority 4
+// interrupts enabled in the main program after all devices initialized
+// vector number 51, interrupt number 35
+  NVIC_EN1_R = 1<<(35-32);      // 9) enable IRQ 35 in NVIC
+  //TIMER3_CTL_R = 0x00000001;    // 10) enable TIMER3A
+}
+
+void Timer5A_Handler(void){
+  TIMER5_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER3A timeout
+  (*PeriodicTask6)();    
 }

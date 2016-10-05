@@ -48,12 +48,6 @@
 #define BLUE      0x04
 #define GREEN     0x08
 
-#define PEAK 			1
-#define NEXT			0
-#define BOTH			3
-#define CH1				1
-#define CH2				2
-
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 long StartCritical (void);    // previous I bit, disable interrupts
@@ -71,18 +65,19 @@ void PortF_Init(void) {
 	GPIO_PORTF_AMSEL_R = 0;						// disable analog functionality on PF
 }
 
-void Pause(void);
+void Envelope(void);
 
 int main(void){ 
 	int check = 0;
 	DisableInterrupts();
-	PLL_Init(Bus50MHz);								// bus clock at 50 MHz
+	PLL_Init(Bus80MHz);								// bus clock at 50 MHz
 	PortF_Init();
 	LEDS = 0;													// turn all LEDs off
 	DAC_Init(0);
 	Buttons_Init();
 	Timer1_Init(&HHandler, 0xffffffff);
 	Timer0A_Init(&MHandler, 0xffffffff);
+	Timer3_Init(&Envelope, 710);//1776);
 	Song_PlayInit();
 	
 	EnableInterrupts();
@@ -95,6 +90,7 @@ int main(void){
 			TIMER2_CTL_R = 0x00000001;
 			TIMER0_CTL_R = 0x00000001;
 			TIMER1_CTL_R = 0x00000001;
+			TIMER3_CTL_R = 0x00000000;
 		}
 		
 		//Pause
@@ -102,6 +98,7 @@ int main(void){
 			TIMER2_CTL_R = 0x00000000;
 			TIMER0_CTL_R = 0x00000000;
 			TIMER1_CTL_R = 0x00000000;
+			TIMER3_CTL_R = 0x00000000;
 		}
 		
 		//Rewind
@@ -110,9 +107,17 @@ int main(void){
 			TIMER2_CTL_R = 0x00000000;
 			TIMER0_CTL_R = 0x00000000;
 			TIMER1_CTL_R = 0x00000000;
+			TIMER3_CTL_R = 0x00000000;
 			//startover
 			Song_PlayInit();
-		}			
-		//END OF SONG PLAY LOOP	
+		}		
+
+		//Enveloping
+		if (check==0x08){
+			TIMER2_CTL_R = 0x00000000;
+			TIMER0_CTL_R = 0x00000000;
+			TIMER1_CTL_R = 0x00000000;
+			TIMER3_CTL_R = 0x00000001;
+		}	
 	}
 }

@@ -12,8 +12,6 @@
 
 #define CURRENT	1
 #define NEXT	0
-//CHANGE SPEED OF SONG, set faster/slower TEMPO
-#define TEMPO  150
 
 const unsigned short Wave[64] = {
 	2048,2224,2399,2571,2737,2897,3048,3190,3321,3439,3545,3635,3711,3770,3813,3839,3848,3839,3813,3770,
@@ -37,7 +35,7 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
   742,779,818,857,896,937,978,1020,1062,1105,1149,1193,1238,1283,1328,1374,1421,
   1467,1515,1562,1610,1658,1706,1755,1803,1852,1901,1950,1999};
   
- Notes HotLine[85] = {
+ Notes HotLine[86] = {
 {D6,	EI,		EI,		1}, 
 {D6,	EI,		EI,		1},
 {A4,	DHA,	0,		2},
@@ -79,7 +77,7 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
 {F5,	EI,		EI,		2},
 {F5,	EI,		QU,		2},
 {F5,	EI,		QU,		2},
-//{0,		0,		0,		0}
+{1,		QU,		QU,		2},
 {F6,	EI,		120,		1},
 {E6,	EI,		EI,		1},
 {D6,	EI,		EI,		1},
@@ -142,118 +140,147 @@ unsigned short SinTable[256] = {  // must be in RAM, can't DMA out of ROM
 {A5,	QU,		HA,		1},
 };
 
+Song Hot = {
+	150,
+	86,
+	HotLine
+};
+
 uint32_t harmIndex = 0;
 uint32_t meloIndex = 0;	
 int harmDuration = 0;
 int meloDuration = 0;
-int harmFreq = 1;
-int melFreq = 1;
 int32_t noteIndex = 0;
 
 int meloStart;
 int melody;
 int harmStart;
 int harmony;
-int temp;
-int scale;
 
-uint32_t tick = (60000000000/(TEMPO*24))/20;	//one of the 96 divisions
+uint32_t tick;	//one of the 96 divisions
 
-Notes* currentSong;
-
+Song* currentSong;
 	
 void nextNoteHandler(){
 	Notes next = getNote(CURRENT);					//get the next note to play in the song
 	Notes future = getNote(NEXT);					//get the future note in the song and increment index
-	TIMER2_TAILR_R = future.timetill*tick;			//set systick timer to 1/16 note duration
+	if(next.duration==0){
+		TIMER0_CTL_R=0x0;
+		TIMER1_CTL_R=0x0;
+		TIMER2_CTL_R=0x0;
+		return;
+	}
+	
+	harmIndex%=256;
+	harmStart=harmIndex;
+	meloIndex%=256;
+	meloStart=meloIndex;
 	
 	// Channel Select
 	if (future.timetill == 0){				// if both, harmony and melody will need to be updated. 
-		harmFreq = future.pitch;
-		melFreq = next.pitch;
-		harmDuration = (future.duration)*tick - 10000;
-		meloDuration = (next.duration)*tick - 10000;	//clock cycles // *20 =ns
-		TIMER0_TAILR_R = (50000000/256)/melFreq;
-		TIMER1_TAILR_R = (50000000/256)/harmFreq;
-		harmIndex%=256;
-		harmStart=harmIndex;
-		meloIndex%=256;
-		meloStart=meloIndex;
+		int harmFreq = future.pitch;
+		int melFreq = next.pitch;
+		harmDuration = (future.duration)*tick*18/harmFreq;
+		meloDuration = (next.duration)*tick*18/melFreq;	//clock cycles // *20 =ns
+		TIMER0_TAILR_R = (80000000/256)/melFreq;
+		TIMER1_TAILR_R = (80000000/256)/harmFreq;
 		future = getNote(NEXT);
-		TIMER2_TAILR_R = future.timetill*tick;
 	}
 	else if (next.channel == 1){		// if not both then pick either mel or harm based on channel. 
-		melFreq = next.pitch;
-		TIMER0_TAILR_R = (50000000/256)/melFreq;
-		meloIndex%=256;
-		meloStart=meloIndex;
-		meloDuration = (next.duration)*tick - 10000;
+		int melFreq = next.pitch;
+		TIMER0_TAILR_R = (80000000/256)/melFreq;
+		meloDuration = (next.duration)*tick*18/melFreq;
 	}else if(next.channel == 2){
-		harmFreq = next.pitch;
-		TIMER1_TAILR_R = (50000000/256)/harmFreq;
-		harmIndex%=256;
-		harmStart=harmIndex;
-		harmDuration = (next.duration)*tick - 10000;
+		int harmFreq = next.pitch;
+		TIMER1_TAILR_R = (80000000/256)/harmFreq;
+		harmDuration = (next.duration)*tick*18/harmFreq;
 	}
+	TIMER2_TAILR_R = future.timetill*tick;			//set systick timer to 1/16 note duration
 }
 	
 void Song_PlayInit() {
-	currentSong = HotLine;
+	currentSong = &Hot;
+	tick = (60000000000/((*currentSong).tempo*24))/20;
 	noteIndex = 0;			//current note in song
 	harmIndex = 0;
 	meloIndex = 0;	
-	//waveIndex = 0;			//current part of instrument we are playing
-	//startWaveIndex = 0;		//where we started in instrument
-	volatile int first = HotLine[0].timetill;
-	Timer2_Init(&nextNoteHandler,first*tick);
+	Timer2_Init(&nextNoteHandler,Hot.notes[0].timetill*tick);
 }
 
 
-int32_t getHarm(){
-	return SinTable[harmIndex%256];
-}
-
-int32_t getMelo(){
-	return SinTable[meloIndex%256];
+int32_t getTable(int index){
+	return SinTable[index%256];
 }
 
 void MHandler(void){
-	temp = (meloIndex-meloStart)*melFreq;
-	meloIndex = meloIndex+1;
-	melody = getMelo();
-	//scale = Song_EnvelopeScale(temp,meloDuration,0);
+	int temp = (meloIndex-meloStart);
+	
+	if(temp<=meloDuration){
+		meloIndex = meloIndex+1;
+		melody = getTable(meloIndex);
+	}
+	else{
+		melody=0;
+	}
+	
+	//scale = Song_EnvelopeScale(temp,total,scale);
 	//melody *= scale;
-	//melody /=1000;
-	//melody = getMelo();
+	//melody /=10000;
 	DAC_Output((melody+harmony)/2);
+	//DAC_Output((melody));
 }
 
 void HHandler(void){
-	int elapsed = (harmIndex-harmStart)*harmFreq;
-	harmIndex = harmIndex+1;
+	int temp = (harmIndex-harmStart);
+	int total = harmDuration;
+	
+	if(temp<=total){
+		harmIndex = harmIndex+1;
+		harmony = getTable(harmIndex);
+	}
+	else{
+		harmony=0;
+	}
 	//harmony = getHarm()*Song_EnvelopeScale(elapsed,harmDuration,1)/1000;
-	harmony = getHarm();
+	
+	//scale = Song_EnvelopeScale(temp,total,scale);
+	//harmony *= scale;
+	//harmony /=10000;
 	DAC_Output((melody+harmony)/2);
+	//DAC_Output((melody));
 }
 
-int Song_EnvelopeScale(int currentMill, int totalMill, int isHarm){ //returns scale*1000 based on completion perecentage of Note
-	if(currentMill>totalMill){
-		if(isHarm==1){
-			harmFreq = 1;
-		}
-		else{
-			melFreq = 1;
-		}
-		return 0;
+int envelopIndex;
+int scale;
+void Envelope(){
+	envelopIndex=(envelopIndex+1)%80000;
+	int envelope = SinTable[envelopIndex%256];
+	scale = Song_EnvelopeScale(envelopIndex,80000,scale);
+	envelope*=scale;
+	envelope/=100;
+	DAC_Output(envelope);
+}
+
+int Song_EnvelopeScale(int currentMill, int totalMill,int scale){ //returns scale*100 based on completion perecentage of Note
+	return 100;
+	/*if(currentMill < totalMill/5){
+		scale+=100;
+		if(scale>=10000)
+			return 10000;
 	}
-	
-	if(currentMill < totalMill/5){
+	else{
+		scale--;
+		if(scale<=5000)
+			return 5000;
+	}
+	return scale;*/
+	/*if(currentMill < totalMill/5){
 		double scale = 8.0/totalMill;
-		int arg = scale * (currentMill -90);
+		int arg = scale * (currentMill - 90);
 		double value = sin(arg);
-		double result = (1.1+0.8*value)*1000;
-		if(result>=1000.0)
-			return 1000;
+		double result = (.4+value)*100;
+		if(result>=100.0)
+			return 100;
 		return result;
 	}
 	else{
@@ -262,24 +289,18 @@ int Song_EnvelopeScale(int currentMill, int totalMill, int isHarm){ //returns sc
 		double c = fourFifths/1.897;
 		double x = (oneFifth-currentMill)/c;
 		double value = exp(x);
-		int ret = value*1000;
+		int ret = value*100;
 		return ret;
-	}
+	}*/
 }
 
 Notes getNote(int32_t peak){
-	if (peak){
-	return HotLine[noteIndex]; 
-	}else{
-	noteIndex++;
-	return HotLine[noteIndex]; 
+	if (!peak){
+		noteIndex++;
 	}
-}
-
-void setHarmDuration(int duration){
-	harmDuration = duration;
-}
-
-void setMeloDuration(int duration){
-	meloDuration = duration;
+	if(noteIndex<=(*currentSong).numNotes){
+		return (*currentSong).notes[noteIndex];
+	}
+	Notes n = {1,	0,		HA,		1};
+	return n;
 }

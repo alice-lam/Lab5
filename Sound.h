@@ -117,6 +117,7 @@ void HHandler(void);
 Notes getNote(int32_t);
 void setHarmDuration(int duration);
 void setMeloDuration(int duration);
-int Song_EnvelopeScale(int currentMill, int totalMill, int isHarm);
+int Song_EnvelopeScale(int currentMill, int totalMill,int scale);
+void Envelope(void);
 #endif
 

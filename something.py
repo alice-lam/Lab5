@@ -30,24 +30,24 @@
 
 from math import exp
 from math import sin
-bpm = 135;
-qn = 60*1000/bpm;
+bpm = 150;
+tick =  (60000000000/(bpm*24))/20;
+qn = (12*tick -10000)/440
+
 f = open('result.txt','w')
 	
 def scale(currentMill, totalMill): #//returns scale*1000
 	if(currentMill < totalMill/5):
 		scale = 8.0/totalMill;
-		print(scale);
 		arg = scale * (currentMill -90);
-		print(arg);
-		return (1.1+0.8*sin(arg))*1000;
+		return (.4+sin(arg))*100;
 	else:
 		fourFifths = totalMill*4/5;
 		oneFifth = totalMill - fourFifths;
 		c = fourFifths/1.897;
 		x = (oneFifth-currentMill)/c;
 		value = exp(x);
-		return value*1000;
+		return value*100;
 		
 for i in range(qn):
 	f.write(str(i)+"	"+str(scale(i,qn))+"\n");
